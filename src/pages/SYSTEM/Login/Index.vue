@@ -82,6 +82,7 @@ export default {
           console.log(response);
     },
     login: function() {
+      let self = this;
       var url = framework.strFormat(
         this.$options.serviceUrl.API_LOGIN,
         this.user,
@@ -90,6 +91,8 @@ export default {
       fsCfg.getData(url, function(res){
         if(res.success){
           Toast(res.content);
+          window.sessionStorage.setItem('user', self.user);
+          window.sessionStorage.setItem('pwd', self.value);
           sessionStorage.setItem("login", "YES");
           const index = location.href.lastIndexOf("/SYSTEM");
           const urlBase = location.href.substring(0, index);

@@ -15,7 +15,7 @@
   <div class="liveCenter">
     <van-nav-bar title left-text="返回" left-arrow @click-left="onClickLeft"/>
     <van-uploader :after-read="onRead" accept="image/*">
-      <van-icon name="photograph"/>
+      <van-icon name="photograph" size="30px"/>
     </van-uploader>
     <div>
       <van-field v-model="value" type="textarea" autosize/>

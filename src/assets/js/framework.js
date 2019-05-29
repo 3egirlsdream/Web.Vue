@@ -7,7 +7,7 @@
     factory((global.framework = {}))
 })(this, function (exports) {
   'use strict'
-  exports.getData = function (url) {
+  /*exports.getData = function (url) {
     Axios
       .get(url)
       .then(response => {
@@ -31,7 +31,7 @@
       .catch(function (error) {
         alert(error);
       });
-  }
+  }*/
 
   exports.strFormat = function () {
     if (arguments.length == 0) return null
