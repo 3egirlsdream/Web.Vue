@@ -17,6 +17,13 @@ const routes = [{
     title: ''
   },
   component: resolve => require(['./Close'], resolve)
+}, {
+  name: 'Essay',
+  path: '/Essay',
+  meta: {
+    title: ''
+  },
+  component: resolve => require(['./Essay'], resolve)
 }];
 
 const router = new Router({

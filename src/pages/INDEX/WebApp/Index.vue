@@ -21,7 +21,7 @@
 .p {
   font-size: 17px;
 }
-.fontsize{
+.fontsize {
   font-size: 11px;
 }
 .size {
@@ -58,7 +58,10 @@
       </van-tab>
       <van-tab title="文章">
         <van-cell-group v-for="list in articles">
-          <van-cell :title="list.articlE_NAME" v-on:click="toArticle(list.id)"/>
+          <van-swipe-cell :right-width="60">
+            <van-cell :title="list.articlE_NAME" v-on:click="toArticle(list.id)" :border="false"/>
+            <van-button square slot="right" type="danger" text="删除"/>
+          </van-swipe-cell>
         </van-cell-group>
         <div
           v-on:click="write"
@@ -91,7 +94,9 @@ export default {
   },
   methods: {
     toArticle: function(list) {
-      Toast(list);
+      const index = location.href.lastIndexOf("/INDEX");
+      const urlBase = location.href.substring(0, index);
+      window.location.href = urlBase + "/INDEX/Article.html#/Essay?id=" + list;
     },
     toCaculator: function() {
       this.$router.push("Caculator");
