@@ -52,7 +52,13 @@
                 <font class="fontsize">文字识别</font>
               </div>
             </td>
-            <td></td>
+            <td>
+              <div v-on:click="toImage">
+                <img class="size" src="../../../assets/img/img.png">
+                <br>
+                <font class="fontsize" style="margin-left:8px;">画廊</font>
+              </div>
+            </td>
           </tr>
         </table>
       </van-tab>
@@ -60,7 +66,7 @@
         <van-cell-group v-for="list in articles">
           <van-swipe-cell :right-width="60">
             <van-cell :title="list.articlE_NAME" v-on:click="toArticle(list.id)" :border="false"/>
-            <van-button square slot="right" type="danger" text="删除"/>
+            <van-button square slot="right" type="danger" text="删除" v-on:click="Delete(list.id)"/>
           </van-swipe-cell>
         </van-cell-group>
         <div
@@ -104,6 +110,11 @@ export default {
     toImg: function() {
       this.$router.push("ImageRead");
     },
+    toImage: function() {
+       const index = location.href.lastIndexOf("/INDEX");
+      const urlBase = location.href.substring(0, index);
+      window.location.href = urlBase + "/INDEX/Image.html";
+    },
     toCodeGenerate1: function() {
       this.$router.push("Code");
     },
@@ -111,6 +122,9 @@ export default {
       const index = location.href.lastIndexOf("/INDEX");
       const urlBase = location.href.substring(0, index);
       window.location.href = urlBase + "/INDEX/Article.html";
+    },
+    Delete: function(id){
+      Toast("unused");
     }
   },
   mounted: function() {

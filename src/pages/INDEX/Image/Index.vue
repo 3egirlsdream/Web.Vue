@@ -2,8 +2,7 @@
 .content {
   box-sizing: content-box !important;
   padding-bottom: 50px;
-  background: #ffffff;
-
+  background: #fafafa;
   .footer {
     width: 100%;
     position: fixed;
@@ -16,41 +15,40 @@
   background-color: white;
   height: 10px;
 }
-
 .pages {
   background-color: white;
 }
-
 .p {
   font-size: 17px;
 }
-
 .size {
   width: 30px;
   height: 30px;
   margin: 5px;
+}
+.imgcontent{
+  width: 100%;
+  padding-left: 10px;
 }
 </style>
 
 
 <template>
   <div class="pages">
-    <van-nav-bar title left-text="返回" left-arrow @click-left="onClickLeft"/>
-    <van-cell-group :border="false">
-      <div style="margin-top:10px;">
-        <font
-          color="black"
-          style="font-family: 'Courier New', Courier, monospace;margin-left:14px;font-size:20px;"
-        >{{title}}</font>
-      </div>
-      <van-field
-        v-model="value"
-        type="textarea"
-        min-height="100%"
-        :autosize="{minHeight:500}"
-        :readonly="true"
-      />
-    </van-cell-group>
+    <van-nav-bar
+      title
+      left-text="返回"
+      right-text="发布"
+      left-arrow
+      @click-left="onClickLeft"
+      @click-right="release"
+    />
+    
+    <div v-for="item in items" v-on:click="toImg(item.id)">
+      <img style="margin-top:20px;" :src="item.imG_CODE" width="100%" height="auto"/>
+      <div class="imgcontent">{{item.imG_BASE64}}</div>
+    </div>
+    
   </div>
 </template>
 
@@ -58,44 +56,40 @@
 <script>
 import fsCfg from "../../../assets/js/fw";
 import { Toast } from "vant";
+import { Image } from 'vant';
 export default {
   name: "Index",
   serverUrl: {
     API_IS_LOGIN: "/api/values/login/user={0}&pwd={1}",
-    API_GET_ARTICLE: "/api/article/id={0}"
+    API_WRITE_ARTICLE: "/api/article/write",
+    API_GET_IMAGE: "/api/values/getimage={0}"
   },
   data() {
     return {
       active1: 0,
       active2: 0,
+      articles: ["111", "1211"],
       value: "",
       title: "",
       date: null,
       user: null,
-      ID: ""
+      items:[]
     };
   },
   methods: {
     onClickLeft: function() {
       this.$router.go(-1);
     },
-    LoadEssay: function() {
-      let self = this;
-      var url = framework.strFormat(
-        this.$options.serverUrl.API_GET_ARTICLE,
-        self.ID
-      );
-
-      fsCfg.getData(url, function(res) {
-        if (res.success) {
-          self.title = res.data.articlE_NAME;
-          self.value = res.data.content;
-        }
-      });
+    release: function() {
+      this.$router.push("UpLoad");
+    },
+    toImg:function(item){
+      Toast(item)
     }
   },
   mounted: function() {
-    this.ID = this.$route.query.id;
+    let self = this;
+    var code = this.$route.query.code;
     var user = window.sessionStorage.getItem("user");
     this.user = user;
     var pwd = window.sessionStorage.getItem("pwd");
@@ -112,8 +106,23 @@ export default {
         window.location.href = urlBase + "/SYSTEM/Login.html";
       }
     });
+    //Toast(user);
 
-    this.LoadEssay();
+    var url = framework.strFormat(
+      this.$options.serverUrl.API_GET_IMAGE,
+      user
+    );
+    fsCfg.getData(url, function(res) {
+      if (res.success) {
+        self.items = res.data;
+        self.items.forEach(element => {
+          element.imG_CODE = "http://47.107.186.141/img/" + element.imG_CODE;
+        });
+      }
+    });
+
+    var myDate = new Date();
+    this.date = myDate.toLocaleString();
   }
 };
 </script>
