@@ -116,7 +116,7 @@ export default {
       fsCfg.getData(url, function(res) {
         if (res.success) {
           self.articles = res.data;
-        }
+        } 
       });
     }
   }
