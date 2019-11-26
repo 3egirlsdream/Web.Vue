@@ -34,7 +34,7 @@
       <van-field v-model="word" autosize />
     </van-cell-group>
     <van-button @click="GetWord"  text="生成词云"  type="primary" size="large"/>
-    <div id="MyCharts" style="width:50%;height:50%;"></div>
+    <div id="MyCharts" style="width:400px;height:400px;margin-top:100px;"></div>
   </div>
 </template>
 
