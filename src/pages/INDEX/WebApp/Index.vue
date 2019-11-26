@@ -33,41 +33,29 @@
 
 
 <template>
-  <div class="pages">
+  <div>
     <van-tabs v-model="active1">
-      <van-tab title="首页" style="padding:5%">
-        <table>
-          <tr>
-            <td>
-              <div v-on:click="toCaculator">
-                <img class="size" src="../../../assets/img/calc.png">
-                <br>
-                <font class="fontsize">计算器</font>
-              </div>
-            </td>
-            <td>
-              <div v-on:click="toImg">
-                <img class="size" src="../../../assets/img/ocr.png">
-                <br>
-                <font class="fontsize">文字识别</font>
-              </div>
-            </td>
-            <td></td>
-          </tr>
-        </table>
+      <van-tab title="首页">
+        <van-grid :clickable="clickable" square>
+          <van-grid-item v-on:click="toCaculator" icon="../../../assets/img/calc.png" text="计算器" />
+          <van-grid-item v-on:click="toImg" icon="../../../assets/img/ocr.png" text="文字识别" />
+          <van-grid-item v-on:click="toWordCloud" icon="../../../assets/img/word.png" text="词云" />
+          <van-grid-item icon="photo-o" text="..." />
+          <van-grid-item icon="photo-o" text="..." />
+        </van-grid>
       </van-tab>
       <van-tab title="文章">
         <van-cell-group v-for="list in articles">
           <van-swipe-cell :right-width="60">
-            <van-cell :title="list.articlE_NAME" v-on:click="toArticle(list.id)" :border="false"/>
-            <van-button square slot="right" type="danger" text="删除"/>
+            <van-cell :title="list.articlE_NAME" v-on:click="toArticle(list.id)" :border="false" />
+            <van-button square slot="right" type="danger" text="删除" />
           </van-swipe-cell>
         </van-cell-group>
         <div
           v-on:click="write"
           style="position: fixed; bottom: 0px; width: 100%;text-align: center;overflow: hidden; padding: 15px;"
         >
-          <img class="size" src="../../../assets/img/release.png">
+          <img class="size" src="../../../assets/img/release.png" />
         </div>
       </van-tab>
       <van-tab title="个人中心"></van-tab>
@@ -89,7 +77,8 @@ export default {
     return {
       active1: 0,
       active2: 0,
-      articles: []
+      articles: [],
+      clickable: true
     };
   },
   methods: {
@@ -107,6 +96,13 @@ export default {
     toCodeGenerate1: function() {
       this.$router.push("Code");
     },
+
+    toWordCloud() {
+      const index = location.href.lastIndexOf("/INDEX");
+      const urlBase = location.href.substring(0, index);
+      window.location.href = urlBase + "/INDEX/WordCloud.html";
+    },
+
     write: function() {
       const index = location.href.lastIndexOf("/INDEX");
       const urlBase = location.href.substring(0, index);
