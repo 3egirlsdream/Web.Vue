@@ -35,39 +35,13 @@
 <template>
   <div>
     <van-tabs v-model="active1">
-      <van-tab title="首页" style="padding:5%">
-        <table>
-          <tr>
-            <td>
-              <div v-on:click="toCaculator">
-                <img class="size" src="../../../assets/img/calc.png">
-                <br>
-                <font class="fontsize">计算器</font>
-              </div>
-            </td>
-            <td>
-              <div v-on:click="toImg">
-                <img class="size" src="../../../assets/img/ocr.png">
-                <br>
-                <font class="fontsize">文字识别</font>
-              </div>
-            </td>
-            <td>
-              <div v-on:click="toImage">
-                <img class="size" src="../../../assets/img/img.png">
-                <br>
-                <font class="fontsize" style="margin-left:8px;">画廊</font>
-              </div>
-            </td>
-          </tr>
-        </table>
       <van-tab title="首页">
         <van-grid :clickable="clickable" square>
-          <van-grid-item v-on:click="toCaculator" icon="../../../assets/img/calc.png" text="计算器" />
-          <van-grid-item v-on:click="toImg" icon="../../../assets/img/ocr.png" text="文字识别" />
-          <van-grid-item v-on:click="toWordCloud" icon="../../../assets/img/word.png" text="词云" />
-          <van-grid-item icon="photo-o" text="..." />
-          <van-grid-item icon="photo-o" text="..." />
+          <van-grid-item v-on:click="toCaculator" icon="edit" text="计算器" />
+          <van-grid-item v-on:click="toImg" icon="scan" text="文字识别" />
+          <van-grid-item v-on:click="toWordCloud" icon="smile-comment-o" text="词云" />
+          <van-grid-item v-on:click="toImage" icon="photo-o" text="画廊" />
+          <van-grid-item icon="more-o" text="..." />
         </van-grid>
       </van-tab>
       <van-tab title="文章">
