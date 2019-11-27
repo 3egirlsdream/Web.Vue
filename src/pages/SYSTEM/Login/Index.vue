@@ -91,9 +91,9 @@ export default {
       fsCfg.getData(url, function(res){
         if(res.success){
           Toast(res.content);
-          window.sessionStorage.setItem('user', self.user);
-          window.sessionStorage.setItem('pwd', self.value);
-          sessionStorage.setItem("login", "YES");
+          framework.setStorage('user', self.user);
+          framework.setStorage('pwd', self.value);
+          framework.setStorage("login", "YES");
           const index = location.href.lastIndexOf("/SYSTEM");
           const urlBase = location.href.substring(0, index);
           window.location.href = urlBase + "/INDEX/WebApp.html"

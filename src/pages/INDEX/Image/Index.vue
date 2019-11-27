@@ -27,8 +27,9 @@
   margin: 5px;
 }
 .imgcontent{
-  width: 100%;
-  padding-left: 10px;
+  width: 90%;
+  margin-left:10px;
+  margin-bottom: 10px;
 }
 </style>
 
@@ -45,8 +46,11 @@
     />
     
     <div v-for="item in items" v-on:click="toImg(item.id)">
-      <img style="margin-top:20px;" :src="item.imG_CODE" width="100%" height="auto"/>
-      <div class="imgcontent">{{item.imG_BASE64}}</div>
+      <van-image round width="20px" height="20px" src="https://img.yzcdn.cn/vant/cat.jpeg"/>
+      <img :src="item.imG_CODE" width="100%" height="auto"/>
+      <van-icon name="like-o" size="25px" style="margin-left:10px;"/>
+      <van-icon name="share" size="25px" style="margin-left:10px;"/>
+      <div class="imgcontent" style="">{{item.imG_BASE64}}</div>
     </div>
     
   </div>
@@ -90,9 +94,9 @@ export default {
   mounted: function() {
     let self = this;
     var code = this.$route.query.code;
-    var user = window.sessionStorage.getItem("user");
+    var user = framework.getStorage("user");
     this.user = user;
-    var pwd = window.sessionStorage.getItem("pwd");
+    var pwd = framework.getStorage("pwd");
     var url = framework.strFormat(
       this.$options.serverUrl.API_IS_LOGIN,
       user,

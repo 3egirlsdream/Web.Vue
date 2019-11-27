@@ -42,6 +42,62 @@
     }
     return str
   }
+  ////本地存储
+  exports.setStorage = function (name, val) {
+    if (localStorage == undefined || localStorage == null) {
+      var nm = this.arraryBufferToBase64(this.stringToBytes(name)).replace(
+        '=',
+        ''
+      )
+      document.cookie = nm + '=' + escape(val)
+    } else {
+      localStorage.setItem(name, val)
+    }
+  }
+  ////读取本地存储
+  exports.getStorage = function (name) {
+    if (localStorage == undefined || localStorage == null) {
+      var nm = this.arraryBufferToBase64(this.stringToBytes(name)).replace(
+        '=',
+        ''
+      )
+      var arr = document.cookie.match(
+        new RegExp('(^| )' + nm + '=([^;]*)(;|$)')
+      )
+      if (arr != null) return unescape(arr[2])
+      return null
+    } else {
+      return localStorage.getItem(name)
+    }
+  }
+  ///删除要地存储
+  exports.removeStorage = function (name) {
+    if (localStorage != undefined || localStorage != null) {
+      localStorage.removeItem(name)
+    } else {
+      var exp = new Date()
+      exp.setTime(exp.getTime() - 1)
+      var cval = this.getStorage(name)
+      if (cval != null)
+        document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString()
+    }
+  }
+  ///字符串转二进制数组
+  exports.stringToBytes = function (str) {
+    var ch,
+      st,
+      re = []
+    for (var i = 0; i < str.length; i++) {
+      ch = str.charCodeAt(i)
+      st = []
+      do {
+        st.push(ch & 0xff)
+        ch = ch >> 8
+      } while (ch)
+      re = re.concat(st.reverse())
+    }
+    return re
+  }
   window.framework = exports
 })
 

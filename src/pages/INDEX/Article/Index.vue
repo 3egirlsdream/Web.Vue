@@ -98,9 +98,9 @@ export default {
   },
   mounted: function() {
     var code = this.$route.query.code;
-    var user = window.sessionStorage.getItem("user");
+    var user = framework.getStorage("user");
     this.user = user;
-    var pwd = window.sessionStorage.getItem("pwd");
+    var pwd = framework.getStorage("pwd");
     var url = framework.strFormat(
       this.$options.serverUrl.API_IS_LOGIN,
       user,

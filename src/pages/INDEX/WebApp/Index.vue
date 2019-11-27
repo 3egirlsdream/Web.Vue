@@ -118,8 +118,11 @@ export default {
     }
   },
   mounted: function() {
+    // framework.setStorage('a', 'aa');
+    // var str = framework.getStorage('a');
+    // alert(str);
     var self = this;
-    var user = window.sessionStorage.getItem("user");
+    var user = framework.getStorage("user");
     if (user != null && user != "") {
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_ALL_ARTICLE,
