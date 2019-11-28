@@ -11,9 +11,46 @@ const fsCfg = {
         return ''
     },
     getData: function (url, callback) {
-        let res = null;
-        Axios.get(this.serverAddr() + url)
-            .then(response => {
+        console.log('GET URL:' + url)
+        let user = framework.getStorage('user');
+        let pwd = framework.getStorage('pwd')
+        let u = framework.strFormat('/api/values/login/user={0}&pwd={1}', user, pwd);
+        Axios.get(this.serverAddr() + u)
+            .then(() => {
+                Axios.get(this.serverAddr() + url)
+                    .then(response => {
+                        if (response != null) {
+                            setTimeout(
+                                function (clbk, msg) {
+                                    clbk(msg)
+                                },
+                                100,
+                                callback,
+                                response.data
+                            )
+                        }
+                    })
+                    // 请求失败
+                    .catch(error => {
+                        alert("网络错误")
+                    });
+            })
+            // 请求失败
+            .catch(error => {
+                const index = location.href.lastIndexOf("/pages");
+                const urlBase = location.href.substring(0, index);
+                window.location.href = urlBase + "/pages/SYSTEM/Login.html";
+            });
+
+    },
+
+    postData: function (url, data, callback) {
+        Axios.post(this.serverAddr() + url, data, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
                 if (response != null) {
                     setTimeout(
                         function (clbk, msg) {
@@ -25,33 +62,12 @@ const fsCfg = {
                     )
                 }
             })
-            // 请求失败
-            .catch(error => {
-                alert("网络错误")
-            });
-    },
-
-    postData: function (url, data, callback) {
-        Axios.post(this.serverAddr() + url, data, {
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then(function (response) {
-                if(response != null){
-                    setTimeout(
-                        function(clbk, msg){
-                            clbk(msg)
-                        },
-                        100,
-                        callback,
-                        response.data
-                    )
-                }
-            })
             .catch(function (error) {
                 alert(error);
             });
+    },
+    isLogin: function () {
+
     }
 }
 

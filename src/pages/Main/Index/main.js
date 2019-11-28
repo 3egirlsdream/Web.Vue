@@ -20,7 +20,9 @@ Vue.prototype._ = _
 
 Vue.use(Vant);
 Vue.use(DataTable);
+import Vuetify from 'vuetify/lib'
 
+Vue.use(Vuetify)
 new Vue({
   router,
   render: h => h(App)
