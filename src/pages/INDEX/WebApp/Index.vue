@@ -41,7 +41,7 @@
           <van-grid-item v-on:click="toImg" icon="scan" text="文字识别" />
           <van-grid-item v-on:click="toWordCloud" icon="smile-comment-o" text="词云" />
           <van-grid-item v-on:click="toImage" icon="photo-o" text="画廊" />
-          <van-grid-item icon="more-o" text="..." />
+          <van-grid-item v-on:click="toNewImage" icon="photo-o" text="♥画廊" />
         </van-grid>
       </van-tab>
       <van-tab title="文章">
@@ -97,6 +97,11 @@ export default {
        const index = location.href.lastIndexOf("/INDEX");
       const urlBase = location.href.substring(0, index);
       window.location.href = urlBase + "/INDEX/Image.html";
+    },
+    toNewImage: function() {
+       const index = location.href.lastIndexOf("/INDEX");
+      const urlBase = location.href.substring(0, index);
+      window.location.href = urlBase + "/SYSTEM/TEST.html";
     },
     toCodeGenerate1: function() {
       this.$router.push("Code");
