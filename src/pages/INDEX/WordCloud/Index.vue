@@ -123,7 +123,7 @@ export default {
         this.$options.serverUrl.API_GET_WORDS,
         JSON.stringify(self.word),
         function(res) {
-          self.data = res;
+          self.data = res.data;
           self.MyCharts();
         }
       );

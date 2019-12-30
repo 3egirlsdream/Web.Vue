@@ -3,7 +3,7 @@ import './framework'
 import Axios from "axios";
 const fsCfg = {
     serverAddr: function () {
-        if (window.location.protocol === 'https:')
+        if (window.location.hostname === 'localhost')
             return 'https://localhost:44361'
         else if (window.location.protocol === 'http:') {
             return 'http://47.107.186.141:4396'
@@ -32,11 +32,13 @@ const fsCfg = {
                     })
                     // 请求失败
                     .catch(error => {
+                        console.log(error);
                         alert("网络错误")
                     });
             })
             // 请求失败
             .catch(error => {
+                console.log(error);
                 const index = location.href.lastIndexOf("/pages");
                 const urlBase = location.href.substring(0, index);
                 window.location.href = urlBase + "/pages/SYSTEM/Login.html";

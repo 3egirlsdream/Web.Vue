@@ -88,18 +88,19 @@ export default {
         this.user,
         this.value
       );
+      framework.setStorage('user', self.user);
+      framework.setStorage('pwd', self.value);
+      framework.setStorage("login", "YES");
+      
       fsCfg.getData(url, function(res){
         if(res.success){
-          Toast(res.content);
-          framework.setStorage('user', self.user);
-          framework.setStorage('pwd', self.value);
-          framework.setStorage("login", "YES");
+          Toast(res.data);
           const index = location.href.lastIndexOf("/SYSTEM");
           const urlBase = location.href.substring(0, index);
           window.location.href = urlBase + "/INDEX/WebApp.html"
         }
         else{
-          Toast(res.content);
+          Toast(res.message.content);
         }
       });
       
