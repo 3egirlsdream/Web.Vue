@@ -38,7 +38,7 @@ const fsCfg = {
             })
             // 请求失败
             .catch(error => {
-                console.log(error);
+                alert(error);
                 const index = location.href.lastIndexOf("/pages");
                 const urlBase = location.href.substring(0, index);
                 window.location.href = urlBase + "/pages/SYSTEM/Login.html";

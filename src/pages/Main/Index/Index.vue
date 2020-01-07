@@ -1,14 +1,13 @@
 <style lang="less" scoped>
-
-
 .Gray {
   background-color: white;
   height: 10px;
 }
 .pages {
-  background-color: #fff;
-  font-family:'Consolas', 'Fira Code Medium',Microsoft Yahei,monospace;
-  overflow-x: hidden;
+  //background-color: #fff;
+  font-family: Montserrat, Roboto, "Source Sans Pro", Helvetica, Arial, Lora,
+    source-han-serif-tc, serif;
+  overflow: hidden;
 }
 
 // a{
@@ -17,47 +16,114 @@
 //   font-size: 14px;
 // }
 
-.menu{
-  a{
-    color:black;
-    padding: 5px;
-    font-size: 9px;
-  }
+.pageconstruct {
+  width: 80%;
+  background: #fcfcfc;
+  height: 100vh;
+  margin: auto;
+}
+.pageconstructleft {
+  width: 30%;
+  height: 100vh;
+  float: left;
+  position: relative;
+}
+.pageconstructright {
+  width: 70%;
+  background: #fff;
+  height: 100vh;
+  float: left;
+  box-shadow:1px 1px 2px lightgray;
+  //padding: 2vh;
+  font-family: '仿宋';
+  overflow: auto;
   
-    a:hover{
-      color: green;
-    }
+}
+
+div::-webkit-scrollbar {
+  width: 0;
+}
+
+.lefttitlestyle {
+  height: 20vh;
+  margin-top:2vh;
+  overflow: hidden;
+}
+.lefttitlestyle:hover {
+  background-color: orange;
+}
+.lefttitlestyle:active{
+   background-color: lightsalmon;
+}
+
+.focusdiv {
+  float: right;
+  height: 20vh;
+  width: 1%;
+}
+.textdiv {
+  float: right;
+  margin-right: 5vh;
+  font-family: 'Consolas' 'Arial', 'Helvetica', '微软等线Light';
+  overflow-x: hidden;
+  cursor: pointer;
+  transition: all .2s linear;
+  color: #000;
+  font-weight: 1;
+}
+
+.aunderline{
+  color:black; 
+}
+.aunderline:hover{
+  text-decoration: underline;
+  color: #7a422c;
+}
+.articlename{
+  overflow:hidden;font-size:3vh;margin-bottom:1vh;font-weight:bold;
+}
+.articleconten{
+  overflow:hidden;height:12vh; font-size:2vh;
+}
+.articletime{
+  position:absolute;bottom:1vh;font-size:2vh;
+}
+.articleline{
+  width:98%;height:0px;border:0.5px solid lightgray;position:absolute;bottom:0;
+}
+.articlestyle{
+  margin:2vh;height:20vh;position:relative;overflow:hidden;
+}
+.powerbystyle{
+  position:absolute;bottom:0;float:right;font-size:1.5vh;text-align:right;width:100%; padding:2vh;color:lightgray;
 }
 </style>
 
 
 <template>
   <div class="pages">
-    <div class="center" style="background:#fff;width:100%;">
-      <!-- header -->
-      <div>
-        <nav>
-          <div class="container" style="position: fixed;top: 0px; background:#fff;box-shadow:2px 2px 5px gray;">
-            <div style="padding-left:20px;">
-              <a class="title" href="/pages/Main/Index.html#/">3egirlsdream</a>
-            </div>
-            <div class="menu" style="padding-right:20px;">
-              <a href="">Blogs</a>
-              <a href="">Categories</a>
-              <a href="/pages/Main/Index.html#/Gallery">Gallery</a>
-              <a href="">About</a>
-            </div>
-          </div>
-        </nav>
-      </div>
-
-      <!-- body -->
-      <div v-for="item in items" style=" margin-top:100px;">
-        <div style="box-shadow:2px 2px 10px rgb(37, 36, 36);width:70%;height:200px;margin:auto;border-radius: 2px;">
-          <div style="font-size:25px;height:40px;">{{item.title}}</div>
-          <div style="font-size:20px;text-align:left;padding:10px;height:120px;overflow:hidden">&nbsp&nbsp&nbsp{{item.content}}</div>
-          <div style="font-size:15px;text-align:right;color:gray;height:40px; margin-right:20px;">{{item.date}}</div>
+    <div class="pageconstruct">
+      <div class="pageconstructleft">
+        <div v-for="item in navigation" class="lefttitlestyle" :style="{'height':item.height}" @click="selected(item)">
+          <div :style="{'background':item.background, 'height':item.height}" class="focusdiv"></div>
+          <div class="textdiv" :style="{'line-height':item.height, 'font-size':item.fontsize}">{{item.title}}</div>
         </div>
+        <div class="powerbystyle">Power by .NetCore & Vue</div>
+      </div>
+      <div class="pageconstructright">
+        <div v-for="item in items" class="articlestyle" v-show="index">
+          <div class="articlename"><a class="aunderline" href="">{{item.articlE_NAME}}</a></div>
+          <div class="articleconten">{{item.content}}</div>
+          <div class="articletime">{{item.datetimE_CREATED}}</div>
+          <div class="articleline"></div>
+        </div>
+
+        <div v-for="item in items" class="articlestyle" style="height:10vh;" v-show="writes">
+          <div class="articlename"><a class="aunderline" href="">{{item.articlE_NAME}}</a></div>
+          <div class="articletime">{{item.datetimE_CREATED}}</div>
+          <div class="articleline"></div>
+        </div>
+        
       </div>
     </div>
   </div>
@@ -77,48 +143,75 @@ export default {
       active1: 0,
       active2: 0,
       articles: [],
-      items:[ 
-        { title :'title', content: '全球最大中文互动问答平台全球最大中文互动问答平台全球最大中文互动问答平台全球最大中文互动问答平台全球最大中文互动问答平台全球最大中文互动问答平台全球最大中文互动问答平台全球最大中文互动问答平台', date:'2019/09/24 10:10:10'}, 
-        { title :'title', content: 'content', date:'2019/09/24 10:10:10'},
-        { title :'title', content: 'content', date:'2019/09/24 10:10:10'},
-        { title :'title', content: 'content', date:'2019/09/24 10:10:10'}]
+
+      navigation: [
+        {
+          title: "3egrilsdream",
+          content: "content",
+          date: "2019/09/24 10:10:10",
+          background: "#fff",
+          height: "15vh",
+          fontsize:'3.5vh'
+        },
+        {
+          title: "Articles",
+          content: "content",
+          date: "2019/09/24 10:10:10",
+          background: "#fff",
+          height: "5vh",
+          fontsize:'2.5vh'
+        },
+        {
+          title: "About",
+          content: "content",
+          date: "2019/09/24 10:10:10",
+          background: "#fff",
+          height: "5vh",
+          fontsize:'2.5vh'
+        },
+        {
+          title: "Photograph",
+          content: "content",
+          date: "2019/09/24 10:10:10",
+          background: "#fff",
+          height: "5vh",
+          fontsize:'2.5vh'
+        }
+      ],
+      items:[],
+      index:true,
+      writes:false,
     };
   },
   methods: {
-    toArticle: function(list) {
-      const index = location.href.lastIndexOf("/INDEX");
-      const urlBase = location.href.substring(0, index);
-      window.location.href = urlBase + "/INDEX/Article.html#/Essay?id=" + list;
+    selected: function(item) {
+      for(let i = 0; i < this.navigation.length; i++){
+        this.navigation[i].background = '#fff';
+      }
+      item.background = '#9f563a';
+      this.index = false;
+      this.writes = false;
+      if(item.title == '3egrilsdream') this.index = true;
+      else if(item.title == 'Articles') this.writes = true;
     },
-    toCaculator: function() {
-      this.$router.push("Caculator");
-    },
-    toImg: function() {
-      this.$router.push("ImageRead");
-    },
-    toCodeGenerate1: function() {
-      this.$router.push("Code");
-    },
-    write: function() {
-      const index = location.href.lastIndexOf("/INDEX");
-      const urlBase = location.href.substring(0, index);
-      window.location.href = urlBase + "/INDEX/Article.html";
-    }
-  },
-  mounted: function() {
-    var self = this;
-    var user = window.sessionStorage.getItem("user");
-    if (user != null && user != "") {
+    getArticle(){
+      let self = this;
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_ALL_ARTICLE,
-        user
+        'cxk'
       );
       fsCfg.getData(url, function(res) {
         if (res.success) {
-          self.articles = res.data;
-        }
+          self.items = res.data;
+          for(let i = 0; i < self.items.length; i++){ 
+            self.items[i].datetimE_CREATED = self.items[i].datetimE_CREATED.replace('T', ' ');
+          }
+        } 
       });
     }
+  },
+  mounted: function() {
+    this.getArticle();
   }
 };
 </script>
