@@ -12,8 +12,8 @@ const fsCfg = {
     },
     getData: function (url, callback) {
         console.log('GET URL:' + url)
-        let user = framework.getStorage('user');
-        let pwd = framework.getStorage('pwd')
+        let user = 'cxk'//framework.getStorage('user');
+        let pwd = '123455'//framework.getStorage('pwd')
         let u = framework.strFormat('/api/values/login/user={0}&pwd={1}', user, pwd);
         Axios.get(this.serverAddr() + u)
             .then(() => {

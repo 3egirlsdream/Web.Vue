@@ -33,11 +33,10 @@
   background: #fff;
   height: 100vh;
   float: left;
-  box-shadow:1px 1px 2px lightgray;
+  box-shadow: 1px 1px 2px lightgray;
   //padding: 2vh;
-  font-family: '仿宋';
+  font-family: "仿宋";
   overflow: auto;
-  
 }
 
 div::-webkit-scrollbar {
@@ -46,14 +45,14 @@ div::-webkit-scrollbar {
 
 .lefttitlestyle {
   height: 20vh;
-  margin-top:2vh;
+  margin-top: 2vh;
   overflow: hidden;
 }
 .lefttitlestyle:hover {
   background-color: orange;
 }
-.lefttitlestyle:active{
-   background-color: lightsalmon;
+.lefttitlestyle:active {
+  background-color: lightsalmon;
 }
 
 .focusdiv {
@@ -64,38 +63,79 @@ div::-webkit-scrollbar {
 .textdiv {
   float: right;
   margin-right: 5vh;
-  font-family: 'Consolas' 'Arial', 'Helvetica', '微软等线Light';
-  overflow-x: hidden;
+  //font-family: 'Consolas' 'Arial', 'Helvetica', '微软等线Light';
+  //overflow-x: hidden;
   cursor: pointer;
-  transition: all .2s linear;
+  transition: all 0.2s linear;
   color: #000;
   font-weight: 1;
 }
 
-.aunderline{
-  color:black; 
+.aunderline {
+  color: black;
 }
-.aunderline:hover{
+.aunderline:hover {
   text-decoration: underline;
   color: #7a422c;
 }
-.articlename{
-  overflow:hidden;font-size:3vh;margin-bottom:1vh;font-weight:bold;
+.articlename {
+  overflow: hidden;
+  font-size: 3vh;
+  margin-bottom: 1vh;
+  font-weight: bold;
 }
-.articleconten{
-  overflow:hidden;height:12vh; font-size:2vh;
+.articleconten {
+  overflow: hidden;
+  height: 12vh;
+  font-size: 2vh;
 }
-.articletime{
-  position:absolute;bottom:1vh;font-size:2vh;
+.articletime {
+  position: absolute;
+  bottom: 1vh;
+  font-size: 2vh;
 }
-.articleline{
-  width:98%;height:0px;border:0.5px solid lightgray;position:absolute;bottom:0;
+.articleline {
+  width: 98%;
+  height: 0px;
+  border: 0.5px solid lightgray;
+  position: absolute;
+  bottom: 0;
 }
-.articlestyle{
-  margin:2vh;height:20vh;position:relative;overflow:hidden;
+.articlestyle {
+  margin: 2vh;
+  height: 21vh;
+  position: relative;
+  overflow: hidden;
 }
-.powerbystyle{
-  position:absolute;bottom:0;float:right;font-size:1.5vh;text-align:right;width:100%; padding:2vh;color:lightgray;
+.powerbystyle {
+  position: absolute;
+  bottom: 0;
+  float: right;
+  font-size: 1.5vh;
+  text-align: right;
+  width: 100%;
+  padding: 2vh;
+  color: lightgray;
+}
+.detailarticle {
+  height: 100vh;
+  width: 100%;
+}
+.detailarticleheader {
+  margin-top: 10px;
+  height: 3vh;
+  width: 100%;
+}
+.detailarticleheaderfont {
+  font-family: "Courier New", Courier, monospace;
+  margin-left: 14px;
+  font-size: 3vh;
+}
+.detailarticlecontent {
+  height: 90vh;
+  width: 100%;
+  padding: 3vh;
+  font-size: 2vh;
 }
 </style>
 
@@ -104,26 +144,46 @@ div::-webkit-scrollbar {
   <div class="pages">
     <div class="pageconstruct">
       <div class="pageconstructleft">
-        <div v-for="item in navigation" class="lefttitlestyle" :style="{'height':item.height}" @click="selected(item)">
+        <div
+          v-for="item in navigation"
+          class="lefttitlestyle"
+          :style="{'height':item.height}"
+          @click="selected(item)"
+        >
           <div :style="{'background':item.background, 'height':item.height}" class="focusdiv"></div>
-          <div class="textdiv" :style="{'line-height':item.height, 'font-size':item.fontsize}">{{item.title}}</div>
+          <div
+            class="textdiv"
+            :style="{'line-height':item.height, 'font-size':item.fontsize}"
+          >{{item.title}}</div>
         </div>
         <div class="powerbystyle">Power by .NetCore & Vue</div>
       </div>
+
       <div class="pageconstructright">
         <div v-for="item in items" class="articlestyle" v-show="index">
-          <div class="articlename"><a class="aunderline" href="">{{item.articlE_NAME}}</a></div>
+          <div class="articlename" @click="toDetail(item)">
+            <a class="aunderline">{{item.articlE_NAME}}</a>
+          </div>
           <div class="articleconten">{{item.content}}</div>
           <div class="articletime">{{item.datetimE_CREATED}}</div>
           <div class="articleline"></div>
         </div>
 
         <div v-for="item in items" class="articlestyle" style="height:10vh;" v-show="writes">
-          <div class="articlename"><a class="aunderline" href="">{{item.articlE_NAME}}</a></div>
+          <div class="articlename" @click="toDetail(item)">
+            <a class="aunderline">{{item.articlE_NAME}}</a>
+          </div>
           <div class="articletime">{{item.datetimE_CREATED}}</div>
           <div class="articleline"></div>
         </div>
-        
+
+        <!-- 详细文章 -->
+        <div class="detailarticle" v-show="dtl">
+          <div class="detailarticleheader">
+            <font class="detailarticleheaderfont">{{detail.articlE_NAME}}</font>
+          </div>
+          <div class="detailarticlecontent">{{detail.content}}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -140,10 +200,7 @@ export default {
   },
   data() {
     return {
-      active1: 0,
-      active2: 0,
-      articles: [],
-
+      detail: [],//详细文章信息
       navigation: [
         {
           title: "3egrilsdream",
@@ -151,7 +208,7 @@ export default {
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "15vh",
-          fontsize:'3.5vh'
+          fontsize: "3.5vh"
         },
         {
           title: "Articles",
@@ -159,7 +216,7 @@ export default {
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "5vh",
-          fontsize:'2.5vh'
+          fontsize: "2.5vh"
         },
         {
           title: "About",
@@ -167,7 +224,7 @@ export default {
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "5vh",
-          fontsize:'2.5vh'
+          fontsize: "2.5vh"
         },
         {
           title: "Photograph",
@@ -175,38 +232,49 @@ export default {
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "5vh",
-          fontsize:'2.5vh'
+          fontsize: "2.5vh"
         }
       ],
-      items:[],
-      index:true,
-      writes:false,
+      items: [],//文章列表
+      index: true,//控制主页的显影
+      writes: false,//控制文章页的显影
+      dtl: false//控制详细文章的显影
     };
   },
   methods: {
     selected: function(item) {
-      for(let i = 0; i < this.navigation.length; i++){
-        this.navigation[i].background = '#fff';
+      for (let i = 0; i < this.navigation.length; i++) {
+        this.navigation[i].background = "#fff";
       }
-      item.background = '#9f563a';
+      item.background = "#9f563a";
       this.index = false;
       this.writes = false;
-      if(item.title == '3egrilsdream') this.index = true;
-      else if(item.title == 'Articles') this.writes = true;
+      this.dtl = false;
+      if (item.title == "3egrilsdream") this.index = true;
+      else if (item.title == "Articles") this.writes = true;
     },
-    getArticle(){
+
+    toDetail(item) {
+      this.detail = item;
+      this.index = false;
+      this.writes = false;
+      this.dtl = true;
+    },
+    getArticle() {
       let self = this;
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_ALL_ARTICLE,
-        'cxk'
+        "cxk"
       );
       fsCfg.getData(url, function(res) {
         if (res.success) {
           self.items = res.data;
-          for(let i = 0; i < self.items.length; i++){ 
-            self.items[i].datetimE_CREATED = self.items[i].datetimE_CREATED.replace('T', ' ');
+          for (let i = 0; i < self.items.length; i++) {
+            self.items[i].datetimE_CREATED = self.items[
+              i
+            ].datetimE_CREATED.replace("T", " ");
           }
-        } 
+        }
       });
     }
   },
