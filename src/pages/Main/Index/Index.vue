@@ -1,8 +1,5 @@
 <style lang="less" scoped>
-.Gray {
-  background-color: white;
-  height: 10px;
-}
+
 .pages {
   //background-color: #fff;
   font-family: Montserrat, Roboto, "Source Sans Pro", Helvetica, Arial, Lora,
@@ -10,11 +7,6 @@
   overflow: hidden;
 }
 
-// a{
-//   color:black;
-//   padding: 5px;
-//   font-size: 14px;
-// }
 
 .pageconstruct {
   width: 80%;
@@ -162,27 +154,27 @@ div::-webkit-scrollbar {
       <div class="pageconstructright">
         <div v-for="item in items" class="articlestyle" v-show="index">
           <div class="articlename" @click="toDetail(item)">
-            <a class="aunderline">{{item.articlE_NAME}}</a>
+            <a class="aunderline">{{item.ARTICLE_NAME}}</a>
           </div>
-          <div class="articleconten">{{item.content}}</div>
-          <div class="articletime">{{item.datetimE_CREATED}}</div>
+          <div class="articleconten">{{item.CONTENT}}</div>
+          <div class="articletime">{{item.DATETIME_CREATED}}</div>
           <div class="articleline"></div>
         </div>
 
         <div v-for="item in items" class="articlestyle" style="height:10vh;" v-show="writes">
           <div class="articlename" @click="toDetail(item)">
-            <a class="aunderline">{{item.articlE_NAME}}</a>
+            <a class="aunderline">{{item.ARTICLE_NAME}}</a>
           </div>
-          <div class="articletime">{{item.datetimE_CREATED}}</div>
+          <div class="articletime">{{item.DATETIME_CREATED}}</div>
           <div class="articleline"></div>
         </div>
 
         <!-- 详细文章 -->
         <div class="detailarticle" v-show="dtl">
           <div class="detailarticleheader">
-            <font class="detailarticleheaderfont">{{detail.articlE_NAME}}</font>
+            <font class="detailarticleheaderfont">{{detail.ARTICLE_NAME}}</font>
           </div>
-          <div class="detailarticlecontent">{{detail.content}}</div>
+          <div class="detailarticlecontent">{{detail.CONTENT}}</div>
         </div>
       </div>
     </div>
@@ -203,7 +195,7 @@ export default {
       detail: [],//详细文章信息
       navigation: [
         {
-          title: "3egrilsdream",
+          title: "3egirlsdream",
           content: "content",
           date: "2019/09/24 10:10:10",
           background: "#fff",
@@ -270,9 +262,9 @@ export default {
         if (res.success) {
           self.items = res.data;
           for (let i = 0; i < self.items.length; i++) {
-            self.items[i].datetimE_CREATED = self.items[
+            self.items[i].DATETIME_CREATED = self.items[
               i
-            ].datetimE_CREATED.replace("T", " ");
+            ].DATETIME_CREATED.replace("T", " ");
           }
         }
       });

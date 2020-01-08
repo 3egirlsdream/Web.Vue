@@ -88,8 +88,8 @@ export default {
 
       fsCfg.getData(url, function(res) {
         if (res.success) {
-          self.title = res.data.articlE_NAME;
-          self.value = res.data.content;
+          self.title = res.data.ARTICLE_NAME;
+          self.value = res.data.CONTENT;
         }
       });
     }

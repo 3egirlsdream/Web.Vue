@@ -45,12 +45,12 @@
       @click-right="release"
     />
     
-    <div v-for="item in items" v-on:click="toImg(item.id)">
+    <div v-for="item in items" v-on:click="toImg(item.ID)">
       <van-image round width="20px" height="20px" src="https://img.yzcdn.cn/vant/cat.jpeg"/>
-      <img :src="item.imG_CODE" width="100%" height="auto"/>
+      <img :src="item.IMG_CODE" width="100%" height="auto"/>
       <van-icon name="like-o" size="25px" style="margin-left:10px;"/>
       <van-icon name="share" size="25px" style="margin-left:10px;"/>
-      <div class="imgcontent" style="">{{item.imG_BASE64}}</div>
+      <div class="imgcontent" style="">{{item.IMG_BASE64}}</div>
     </div>
     
   </div>
@@ -120,7 +120,7 @@ export default {
       if (res.success) {
         self.items = res.data;
         self.items.forEach(element => {
-          element.imG_CODE = "http://47.107.186.141/img/" + element.imG_CODE;
+          element.IMG_CODE = "http://47.107.186.141/img/" + element.IMG_CODE;
         });
       }
     });
