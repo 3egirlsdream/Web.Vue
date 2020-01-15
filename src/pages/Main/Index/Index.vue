@@ -1,5 +1,4 @@
 <style lang="less" scoped>
-
 .pages {
   //background-color: #fff;
   font-family: Montserrat, Roboto, "Source Sans Pro", Helvetica, Arial, Lora,
@@ -7,25 +6,28 @@
   overflow: hidden;
 }
 
-
-.pageconstruct {
-  width: 80%;
-  background: #fcfcfc;
+.page_construct {
+  width: 90%;
+  background: #fff;
   height: 100vh;
   margin: auto;
+  box-shadow: 1px 1px 2px lightgray;
 }
-.pageconstructleft {
+.page_construct_left {
   width: 30%;
   height: 100vh;
   float: left;
+  background: #fcfcfc;
   position: relative;
+  //box-shadow: 1px 1px 2px lightgray;
 }
-.pageconstructright {
+.page_construct_right {
+  padding-top: 2vh;
   width: 70%;
   background: #fff;
   height: 100vh;
   float: left;
-  box-shadow: 1px 1px 2px lightgray;
+  box-shadow: -1px 1px 2px lightgray;
   //padding: 2vh;
   font-family: "仿宋";
   overflow: auto;
@@ -35,19 +37,19 @@ div::-webkit-scrollbar {
   width: 0;
 }
 
-.lefttitlestyle {
+.left_title_style {
   height: 20vh;
   margin-top: 2vh;
   overflow: hidden;
 }
-.lefttitlestyle:hover {
+.left_title_style:hover {
   background-color: orange;
 }
-.lefttitlestyle:active {
+.left_title_style:active {
   background-color: lightsalmon;
 }
 
-.focusdiv {
+.focus_div {
   float: right;
   height: 20vh;
   width: 1%;
@@ -63,43 +65,60 @@ div::-webkit-scrollbar {
   font-weight: 1;
 }
 
-.aunderline {
+.a_underline {
   color: black;
 }
-.aunderline:hover {
+.a_underline:hover {
   text-decoration: underline;
   color: #7a422c;
 }
-.articlename {
+.article_name {
   overflow: hidden;
-  font-size: 3vh;
-  margin-bottom: 1vh;
+  font-size: 4vh;
+  margin-left: 2vh;
   font-weight: bold;
 }
-.articleconten {
+.article_content {
+  text-indent: 2em;
+  font-family: Lora, source-han-serif-tc, serif;
+  padding-right: 2vh;
+  padding-top:2vh;
   overflow: hidden;
-  height: 12vh;
-  font-size: 2vh;
+  height: 10vh;
+  margin-left: 2vh;
+  font-size: 3vh;
 }
-.articletime {
+.article_time {
   position: absolute;
-  bottom: 1vh;
-  font-size: 2vh;
+  bottom: 3vh;
+  font-size: 2.5vh;
+  margin-left: 2.5vh;
+  color: black;
 }
-.articleline {
-  width: 98%;
-  height: 0px;
-  border: 0.5px solid lightgray;
+.article_div {
+  margin: auto;
+  left: 2vh;
+  width: 96%;
   position: absolute;
   bottom: 0;
 }
-.articlestyle {
-  margin: 2vh;
-  height: 21vh;
+.article_line {
+  margin: auto auto;
+  color: #987cb9;
+  size: 1;
+  width: 90%;
+  position: absolute;
+  bottom: 0;
+}
+.article_style {
+  height: 24vh;
   position: relative;
   overflow: hidden;
 }
-.powerbystyle {
+.article_style:hover {
+  background: #f7f7f7;
+}
+.powered_by_style {
   position: absolute;
   bottom: 0;
   float: right;
@@ -109,72 +128,105 @@ div::-webkit-scrollbar {
   padding: 2vh;
   color: lightgray;
 }
-.detailarticle {
+.detail_article {
   height: 100vh;
   width: 100%;
 }
-.detailarticleheader {
+.detail_article_header {
   margin-top: 10px;
-  height: 3vh;
+  height: auto;
   width: 100%;
 }
-.detailarticleheaderfont {
+.detail_article_header_font {
   font-family: "Courier New", Courier, monospace;
-  margin-left: 14px;
-  font-size: 3vh;
+  margin-left: 4vh;
+  font-size: 4vh;
 }
-.detailarticlecontent {
-  height: 90vh;
+.detail_article_content {
+  text-indent: 2em;
+  clear: both;
+  height: auto;
   width: 100%;
-  padding: 3vh;
-  font-size: 2vh;
+  padding: 4vh;
+  font-size: 3vh;
+  font-family: Lora, source-han-serif-tc, serif;
+}
+.category_border_style{
+  margin-left: 4vh;
+  border-radius: 1px;
+  border: 0.5px solid springgreen;
+  height: 3.9vh;
+  width: auto;
+  padding: 1px;
+  float: left;
+}
+.category_font_style{
+  color:lightblue;
+  font-size:2.5vh;
+  display:inline-block;
+  display:inline;
+  zoom:1;
+  float:left;
+  text-align:3vh;
+  line-height:3vh;
 }
 </style>
 
 
 <template>
   <div class="pages">
-    <div class="pageconstruct">
-      <div class="pageconstructleft">
+    <div class="page_construct">
+      <div class="page_construct_left">
         <div
           v-for="item in navigation"
-          class="lefttitlestyle"
-          :style="{'height':item.height}"
+          class="left_title_style"
+          :style="{'height':item.height, 'background':item.clickbackground}"
           @click="selected(item)"
         >
-          <div :style="{'background':item.background, 'height':item.height}" class="focusdiv"></div>
+          <div :style="{'background':item.background, 'height':item.height}" class="focus_div"></div>
           <div
             class="textdiv"
             :style="{'line-height':item.height, 'font-size':item.fontsize}"
           >{{item.title}}</div>
         </div>
-        <div class="powerbystyle">Power by .NetCore & Vue</div>
+        <div class="powered_by_style">Powered by .NetCore & Vue</div>
       </div>
 
-      <div class="pageconstructright">
-        <div v-for="item in items" class="articlestyle" v-show="index">
-          <div class="articlename" @click="toDetail(item)">
-            <a class="aunderline">{{item.ARTICLE_NAME}}</a>
+      <div class="page_construct_right">
+        <div v-for="item in items" class="article_style" v-show="index">
+          <div class="article_name" @click="toDetail(item)">
+            <a class="a_underline">{{item.ARTICLE_NAME}}</a>
           </div>
-          <div class="articleconten">{{item.CONTENT}}</div>
-          <div class="articletime">{{item.DATETIME_CREATED}}</div>
-          <div class="articleline"></div>
+          <div>
+            <div class="article_content" style="width:70%;float:left;" v-html="item.INDEX_CONTENT"></div>
+            <img :src="item.IMG_CODE" width="20%" style="float:left;"/>
+          </div>
+          
+          <div class="article_time">{{item.DATETIME_CREATED}}</div>
+          <hr class="article_div" color="#f0f0f0" SIZE="1"/>
         </div>
 
-        <div v-for="item in items" class="articlestyle" style="height:10vh;" v-show="writes">
-          <div class="articlename" @click="toDetail(item)">
-            <a class="aunderline">{{item.ARTICLE_NAME}}</a>
+        <div v-for="item in items" class="article_style" style="height:12vh;" v-show="writes">
+          <div class="article_name" @click="toDetail(item)">
+            <a class="a_underline">{{item.ARTICLE_NAME}}</a>
           </div>
-          <div class="articletime">{{item.DATETIME_CREATED}}</div>
-          <div class="articleline"></div>
+          <div class="article_time">{{item.DATETIME_CREATED}}</div>
+          <hr class="article_div"  color="#f0f0f0" SIZE="1"/>
         </div>
-
+        
         <!-- 详细文章 -->
-        <div class="detailarticle" v-show="dtl">
-          <div class="detailarticleheader">
-            <font class="detailarticleheaderfont">{{detail.ARTICLE_NAME}}</font>
+        <div class="detail_article" v-show="dtl">
+          <img :src="detail.IMG_CODE" width="100%"/>
+          <div class="detail_article_header">
+            <font class="detail_article_header_font">{{detail.ARTICLE_NAME}}</font>
+            <br/>
+            <div class="category_border_style">
+              <font class="category_font_style">{{detail.CATEGORY_NAME}}</font>
+              <br style="clear:both;">
+            </div>
+            
           </div>
-          <div class="detailarticlecontent">{{detail.CONTENT}}</div>
+          <p class="detail_article_content" v-html="detail.CONTENT"></p>
         </div>
       </div>
     </div>
@@ -192,7 +244,7 @@ export default {
   },
   data() {
     return {
-      detail: [],//详细文章信息
+      detail: [], //详细文章信息
       navigation: [
         {
           title: "3egirlsdream",
@@ -227,22 +279,24 @@ export default {
           fontsize: "2.5vh"
         }
       ],
-      items: [],//文章列表
-      index: true,//控制主页的显影
-      writes: false,//控制文章页的显影
-      dtl: false//控制详细文章的显影
+      items: [], //文章列表
+      index: true, //控制主页的显影
+      writes: false, //控制文章页的显影
+      dtl: false //控制详细文章的显影
     };
   },
   methods: {
     selected: function(item) {
       for (let i = 0; i < this.navigation.length; i++) {
         this.navigation[i].background = "#fff";
+        this.navigation[i].clickbackground = null;
       }
       item.background = "#9f563a";
+      item.clickbackground = "orange";
       this.index = false;
       this.writes = false;
       this.dtl = false;
-      if (item.title == "3egrilsdream") this.index = true;
+      if (item.title == "3egirlsdream") this.index = true;
       else if (item.title == "Articles") this.writes = true;
     },
 
@@ -262,9 +316,9 @@ export default {
         if (res.success) {
           self.items = res.data;
           for (let i = 0; i < self.items.length; i++) {
-            self.items[i].DATETIME_CREATED = self.items[
-              i
-            ].DATETIME_CREATED.replace("T", " ");
+            if(self.items[i].IMG_CODE != null) self.items[i].IMG_CODE = "http://47.107.186.141/img/" + self.items[i].IMG_CODE;
+            self.items[i].DATETIME_CREATED = self.items[i].DATETIME_CREATED.replace("T", " ");
+            self.items[i].INDEX_CONTENT = self.items[i].CONTENT.replace(/<[^>].*?>/g,"");
           }
         }
       });
