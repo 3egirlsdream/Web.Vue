@@ -177,7 +177,36 @@ div::-webkit-scrollbar {
   overflow: scroll;
 }
 
+.back_1 {
+  border-radius: 5px;
+  background: url("https://cdn.wallpaperhub.app/cloudcache/8/f/e/9/c/8/8fe9c82ddad8072931176875ed43074c5ef78e1e.jpg")
+    no-repeat;
+  background-size: cover;
+  width: 25%;
+  float: left;
+  height: 100px;
+  position: relative;
+  margin: 4%;
+}
 
+.demo2 {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100px;
+  line-height: 100px;
+  text-align: center;
+  float: left;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.1);
+  height: 100%;
+}
 </style>
 
 
@@ -186,16 +215,37 @@ div::-webkit-scrollbar {
     <van-tabs v-model="active" animated>
       <van-tab title="我的" style="background:white;">
         <div style="margin:15px; border-radius:10px; height:15vh;">
-          <van-swipe class="my-swipe" :autoplay="3000" indicator-color="white" style="border-radius:10px;">
+          <van-swipe
+            class="my-swipe"
+            :autoplay="3000"
+            indicator-color="white"
+            style="border-radius:10px;"
+          >
             <van-swipe-item v-for="(image, index) in images" :key="index">
-              <img :src="image" width="100%"/>
+              <img :src="image" width="100%" />
             </van-swipe-item>
           </van-swipe>
           <div>
-            <div v-for="icon in icons" style="border-radius:50px;background:red;float:left; margin:5px; width:30px;height:30px;">
-                <van-icon :name="icon" size="25" @click="onclick" style="text-align:center;margin:3px;"/>
+            <div
+              v-for="icon in icons"
+              style="border-radius:50px;background:red;float:left; margin:5px; width:30px;height:30px;"
+            >
+              <van-icon
+                :name="icon"
+                size="25"
+                @click="onclick"
+                style="text-align:center;margin:3px;"
+              />
             </div>
-            
+          </div>
+        </div>
+        <div style="clear:both;"></div>
+        <div v-for="item in boxes" class="back_1" @click="onclick">
+          <div style="margin:0 auto;line-height:100px;" class="demo2">
+            <van-icon name="like" color="red">
+              <br />
+              <font color="black">{{item}}</font>
+            </van-icon>
           </div>
         </div>
       </van-tab>
@@ -215,10 +265,15 @@ export default {
   },
   data() {
     return {
-      icons:["play", "audio", "graphic", "column", "invition"],
+      boxes: [
+        "我喜欢的音乐",
+        "FM",
+        "···"
+      ],
+      icons: ["play", "audio", "graphic", "column", "invition"],
       images: [
-        "http://bimgs.plmeizi.com/images/bing/2020/OHR.GreatReefDay_ZH-CN1185297376_1920x1080.jpg",
-        "http://bimgs.plmeizi.com/images/bing/2020/OHR.SynchronousFireflies_ZH-CN6323931412_1920x1080.jpg"
+        "https://cdn.wallpaperhub.app/cloudcache/d/0/c/a/6/7/d0ca67fb67d065130241cde719fbef2908393ffd.png",
+        "https://cdn.wallpaperhub.app/cloudcache/4/4/1/9/d/9/4419d949c0724e36f4ac108715ebfb507ac0740e.jpg"
       ],
       Singers: [
         "All",
@@ -276,8 +331,8 @@ export default {
         }
       });
     },
-    onclick(){
-      this.$router.push({path:'MyMusic'});
+    onclick() {
+      this.$router.push({ path: "MyMusic" });
     }
   },
   mounted: function() {
