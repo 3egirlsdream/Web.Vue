@@ -29,7 +29,7 @@
   float: left;
   box-shadow: -1px 1px 2px lightgray;
   //padding: 2vh;
-  font-family: "仿宋";
+  font-family: Lora,source-han-serif-tc,serif;
   overflow: auto;
 }
 
@@ -74,7 +74,7 @@ div::-webkit-scrollbar {
 }
 .article_name {
   overflow: hidden;
-  font-size: 4vh;
+  font-size: 3vh;
   margin-left: 2vh;
   font-weight: bold;
 }
@@ -86,14 +86,14 @@ div::-webkit-scrollbar {
   overflow: hidden;
   height: 10vh;
   margin-left: 2vh;
-  font-size: 3vh;
+  font-size: 2.5vh;
 }
 .article_time {
   position: absolute;
   bottom: 3vh;
-  font-size: 2.5vh;
+  font-size: 2vh;
   margin-left: 2.5vh;
-  color: black;
+  color: gray;
 }
 .article_div {
   margin: auto;
@@ -138,9 +138,10 @@ div::-webkit-scrollbar {
   width: 100%;
 }
 .detail_article_header_font {
-  font-family: "Courier New", Courier, monospace;
+  font-family: Lora,source-han-serif-tc,serif;
   margin-left: 4vh;
-  font-size: 4vh;
+  font-size: 3vh;
+  font-weight: bold;
 }
 .detail_article_content {
   text-indent: 2em;
@@ -148,27 +149,28 @@ div::-webkit-scrollbar {
   height: auto;
   width: 100%;
   padding: 4vh;
-  font-size: 3vh;
+  font-size: 2vh;
   font-family: Lora, source-han-serif-tc, serif;
 }
 .category_border_style{
   margin-left: 4vh;
   border-radius: 1px;
   border: 0.5px solid springgreen;
-  height: 3.9vh;
+  height: 2.5vh;
   width: auto;
   padding: 1px;
   float: left;
 }
 .category_font_style{
   color:lightblue;
-  font-size:2.5vh;
+  font-size:1.7vh;
   display:inline-block;
   display:inline;
   zoom:1;
   float:left;
-  text-align:3vh;
-  line-height:3vh;
+  text-align:2.5vh;
+  line-height:1.8vh;
+  font-family: '行楷'
 }
 </style>
 
@@ -322,10 +324,13 @@ export default {
           }
         }
       });
-    }
+    },
+    
   },
   mounted: function() {
     this.getArticle();
   }
 };
+
+
 </script>

@@ -346,9 +346,8 @@ export default {
         }
       );
 
-      fsCfg.getData(this.$options.serverUrl.API_GET_ARTICLE_CATEGORY, function(
-        res
-      ) {
+      fsCfg.getData(this.$options.serverUrl.API_GET_ARTICLE_CATEGORY, 
+      function(res) {
         if (res.success) {
           for (let index = 0; index < res.data.length; index++) {
             let temp = {

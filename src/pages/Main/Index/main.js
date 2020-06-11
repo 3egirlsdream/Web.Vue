@@ -15,11 +15,14 @@ import {
 } from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
 
+import ElementUI from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
 import _ from 'lodash'
 Vue.prototype._ = _
 
 Vue.use(Vant);
 Vue.use(DataTable);
+Vue.use(ElementUI);
 
 new Vue({
   router,

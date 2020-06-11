@@ -98,6 +98,13 @@
     }
     return re
   }
+
+  //
+  exports.isNullOrWhite = function(str){
+    if(str == null) return false;
+    if(str == "") return false;
+    return true;
+  }
   window.framework = exports
 })
 
