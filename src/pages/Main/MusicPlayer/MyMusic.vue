@@ -182,7 +182,7 @@ div::-webkit-scrollbar {
 <template>
   <div class="pages">
       <div class="page_construct_right" style="border-radius:25px;">
-        <van-cell icon="audio" value="播放全部" clickable/>
+        <van-cell icon="audio" value="播放全部" clickable @click="playAll()"/>
         <van-cell v-for="item in musics" :key="item" :title="item" @click="onclick(item)" />
       </div>
 
@@ -193,7 +193,7 @@ div::-webkit-scrollbar {
       absolute
       horizontal
     >
-      <audio ref="audio" controls="controls" loop="loop" preload="auto" :src="src">
+      <audio ref="audio" controls="controls" preload="auto" :src="src">
         <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
         <!-- <source :src="src" type="audio/mpeg" /> -->
       </audio>
@@ -232,9 +232,9 @@ export default {
         inactive: "https://img.yzcdn.cn/vant/user-inactive.png"
       },
       items: [], //文章列表
-      index: true, //控制主页的显影
-      writes: false, //控制文章页的显影
-      dtl: false //控制详细文章的显影
+      position:0,
+      audio:null,
+      playlist:[]
     };
   },
   methods: {
@@ -243,6 +243,22 @@ export default {
       this.src = "http://www.endingisnihility.xyz/mp3/" + item;
       setTimeout(function() {
         self.$refs.audio.play();
+      }, 1000);
+    },
+    playAll(){
+      let self = this;
+      self.playlist = [];
+      var audio = self.$refs.audio;
+      this.audio = audio;
+      audio.addEventListener('ended', this.playEndedHandler, false);
+      this.musics.forEach(element => {
+        self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element);
+      });
+      audio.playlist = self.playlist;
+      audio.position = 0;
+      audio.src = self.playlist[audio.position % audio.playlist.length];
+      setTimeout(function() {
+        audio.play();
       }, 1000);
     },
     getall(name) {
@@ -260,8 +276,14 @@ export default {
           Toast(res.message.content);
         }
       });
-    }
+    },
+    playEndedHandler:function(){
+        this.position++;
+        this.src = this.playlist[this.position % this.playlist.length];
+        this.audio.play();
+    },
   },
+  
   mounted: function() {
     this.getall("All");
   }
