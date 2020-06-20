@@ -249,8 +249,26 @@ div::-webkit-scrollbar {
           </div>
         </div>
       </van-tab>
+      <van-tab title="全部">
+        <div class="page_construct_right" style="border-radius:25px;">
+          <van-cell icon="audio" value="播放全部" clickable />
+          <van-cell v-for="item in musics" :key="item" :title="item" @click="onclickPlay(item)" />
+        </div>
+      </van-tab>
       <van-tab title="发现"></van-tab>
     </van-tabs>
+    <v-bottom-navigation
+      style="background:#f1f3f4;"
+      scroll-target="#scroll-area-1"
+      hide-on-scroll
+      absolute
+      horizontal
+    >
+      <audio ref="audio" controls="controls" loop="loop" preload="auto" :src="src">
+        <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
+        <!-- <source :src="src" type="audio/mpeg" /> -->
+      </audio>
+    </v-bottom-navigation>
   </div>
 </template>
 
@@ -265,11 +283,7 @@ export default {
   },
   data() {
     return {
-      boxes: [
-        "我喜欢的音乐",
-        "FM",
-        "···"
-      ],
+      boxes: ["我喜欢的音乐", "FM", "···"],
       icons: ["play", "audio", "graphic", "column", "invition"],
       images: [
         "https://cdn.wallpaperhub.app/cloudcache/d/0/c/a/6/7/d0ca67fb67d065130241cde719fbef2908393ffd.png",
@@ -308,7 +322,7 @@ export default {
     };
   },
   methods: {
-    onclick(item) {
+    onclickPlay(item) {
       var self = this;
       this.src = "http://www.endingisnihility.xyz/mp3/" + item;
       setTimeout(function() {

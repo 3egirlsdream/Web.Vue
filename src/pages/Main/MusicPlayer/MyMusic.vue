@@ -181,10 +181,10 @@ div::-webkit-scrollbar {
 
 <template>
   <div class="pages">
-      <div class="page_construct_right" style="border-radius:25px;">
-        <van-cell icon="audio" value="播放全部" clickable @click="playAll()"/>
-        <van-cell v-for="item in musics" :key="item" :title="item" @click="onclick(item)" />
-      </div>
+    <div class="page_construct_right" style="border-radius:25px;">
+      <van-cell icon="audio" value="播放全部" clickable @click="playAll()"/>
+      <van-cell v-for="item in musics" :key="item" :title="item" @click="onclick(item)" />
+    </div>
 
     <v-bottom-navigation
       style="background:#f1f3f4;"
@@ -232,9 +232,9 @@ export default {
         inactive: "https://img.yzcdn.cn/vant/user-inactive.png"
       },
       items: [], //文章列表
-      position:0,
-      audio:null,
-      playlist:[]
+      position: 0,
+      audio: null,
+      playlist: []
     };
   },
   methods: {
@@ -245,20 +245,20 @@ export default {
         self.$refs.audio.play();
       }, 1000);
     },
-    playAll(){
+    playAll() {
       let self = this;
       self.playlist = [];
-      var audio = self.$refs.audio;
-      this.audio = audio;
-      audio.addEventListener('ended', this.playEndedHandler, false);
+      var ao = self.$refs.audio;
+      this.audio = ao;
+      this.audio.addEventListener("ended", this.playEndedHandler, false);
       this.musics.forEach(element => {
         self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element);
       });
-      audio.playlist = self.playlist;
-      audio.position = 0;
-      audio.src = self.playlist[audio.position % audio.playlist.length];
+      this.audio.playlist = self.playlist;
+      this.audio.position = 0;
+      this.audio.src = self.playlist[self.audio.position % self.audio.playlist.length];
       setTimeout(function() {
-        audio.play();
+        self.audio.play();
       }, 1000);
     },
     getall(name) {
@@ -277,13 +277,13 @@ export default {
         }
       });
     },
-    playEndedHandler:function(){
-        this.position++;
-        this.src = this.playlist[this.position % this.playlist.length];
-        this.audio.play();
-    },
+    playEndedHandler: function() {
+      this.position++;
+      this.src = this.playlist[this.position % this.playlist.length];
+      this.audio.play();
+    }
   },
-  
+
   mounted: function() {
     this.getall("All");
   }
