@@ -182,8 +182,21 @@ div::-webkit-scrollbar {
 <template>
   <div class="pages">
     <div class="page_construct_right" style="border-radius:25px;">
-      <van-cell icon="audio" value="播放全部" clickable @click="playAll()"/>
-      <van-cell v-for="item in musics" :key="item" :title="item" @click="onclick(item)" />
+      <van-cell
+        icon="arrow-left"
+        style="background:transparent;"
+        clickable
+        @click="$router.go(-1)"
+      />
+      <van-cell icon="audio" value="播放全部" clickable @click="playAll()" style="background:transparent;"/>
+      <van-row v-for="item in musics">
+        <van-col span="2" style="margin: 12px 0px 10px 10px;">
+          <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
+        </van-col>
+        <van-col span="16">
+          <van-cell :key="item.name" :title="item.name" @click="onclickPlay(item.name)" />
+        </van-col>
+      </van-row>
     </div>
 
     <v-bottom-navigation
@@ -208,7 +221,8 @@ import fsCfg from "../../../assets/js/fw";
 export default {
   name: "Index",
   serverUrl: {
-    API_GET_ALL: "/api/music/GetAllMusic/name={0}"
+    API_GET_I_LIKE: "/api/music/GetMusics/like={0}",
+    API_ADD_I_LIKE: "/api/music/AddILike"
   },
   data() {
     return {
@@ -238,7 +252,7 @@ export default {
     };
   },
   methods: {
-    onclick(item) {
+    onclickPlay(item) {
       var self = this;
       this.src = "http://www.endingisnihility.xyz/mp3/" + item;
       setTimeout(function() {
@@ -252,24 +266,25 @@ export default {
       this.audio = ao;
       this.audio.addEventListener("ended", this.playEndedHandler, false);
       this.musics.forEach(element => {
-        self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element);
+        self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element.name);
       });
       this.audio.playlist = self.playlist;
       this.audio.position = 0;
-      this.audio.src = self.playlist[self.audio.position % self.audio.playlist.length];
+      this.audio.src =
+        self.playlist[self.audio.position % self.audio.playlist.length];
       setTimeout(function() {
         self.audio.play();
       }, 1000);
     },
-    getall(name) {
+    getall() {
       let self = this;
-      var url = framework.strFormat(this.$options.serverUrl.API_GET_ALL, name);
+      var url = framework.strFormat(
+        this.$options.serverUrl.API_GET_I_LIKE,
+        "Y"
+      );
       var res = fsCfg.getData(url, function(res) {
         if (res.success) {
           var data = res.data;
-          for (var i = 0; i < data.length; i++) {
-            data[i] = data[i].replace("../mp3\\", "");
-          }
           self.musics = data;
           self.active = 0;
         } else {
@@ -281,6 +296,27 @@ export default {
       this.position++;
       this.src = this.playlist[this.position % this.playlist.length];
       this.audio.play();
+    },
+    ilikeClick(name) {
+      let self = this;
+      var data = {
+        USER_CODE: "SYS",
+        MUSIC_NAME: name
+      };
+      fsCfg.postData(
+        this.$options.serverUrl.API_ADD_I_LIKE,
+        JSON.stringify(data),
+        function(res) {
+          if (res.success) {
+            for (let index = 0; index < self.musics.length; index++) {
+              const element = self.musics[index];
+              if (element.name == name) {
+                element.color = element.color == "red" ? "black" : "red";
+              }
+            }
+          }
+        }
+      );
     }
   },
 

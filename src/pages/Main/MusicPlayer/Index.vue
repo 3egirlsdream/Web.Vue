@@ -252,10 +252,19 @@ div::-webkit-scrollbar {
       <van-tab title="全部">
         <div class="page_construct_right" style="border-radius:25px;">
           <van-cell icon="audio" value="播放全部" clickable />
-          <van-cell v-for="item in musics" :key="item" :title="item" @click="onclickPlay(item)" />
+          <van-row v-for="item in musics">
+            <van-col span="2" style="margin: 12px 0px 10px 10px;">
+              <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
+            </van-col>
+            <van-col span="16">
+              <van-cell :key="item.name" :title="item.name" @click="onclickPlay(item.name)" />
+            </van-col>
+          </van-row>
         </div>
       </van-tab>
-      <van-tab title="发现"></van-tab>
+      <van-tab title="登录">
+        
+      </van-tab>
     </van-tabs>
     <v-bottom-navigation
       style="background:#f1f3f4;"
@@ -279,7 +288,8 @@ import fsCfg from "../../../assets/js/fw";
 export default {
   name: "Index",
   serverUrl: {
-    API_GET_ALL: "/api/music/GetAllMusic/name={0}"
+    API_GET_ALL: "/api/music/GetMusics/like={0}",
+    API_ADD_I_LIKE: "/api/music/AddILike"
   },
   data() {
     return {
@@ -300,7 +310,11 @@ export default {
         "双笙",
         "买辣椒也用券"
       ],
-      musics: ["我乐意.mp3", "惊鸿一面.mp3", "许嵩 - 幻听.mp3"],
+      musics: [
+        { name: "我乐意.mp3", color: "red" },
+        { name: "惊鸿一面.mp3", color: "black" },
+        { name: "许嵩 - 幻听.mp3", color: "red" }
+      ],
       src: "http://www.endingisnihility.xyz/mp3/惊鸿一面.mp3",
       detail: [], //详细文章信息
       active: 0,
@@ -329,14 +343,14 @@ export default {
         self.$refs.audio.play();
       }, 1000);
     },
-    getall(name) {
+    getall() {
       let self = this;
-      var url = framework.strFormat(this.$options.serverUrl.API_GET_ALL, name);
+      var url = framework.strFormat(this.$options.serverUrl.API_GET_ALL, "N");
       var res = fsCfg.getData(url, function(res) {
         if (res.success) {
           var data = res.data;
           for (var i = 0; i < data.length; i++) {
-            data[i] = data[i].replace("../mp3\\", "");
+            //data[i] = data[i].replace("../mp3\\", "");
           }
           self.musics = data;
           self.active = 0;
@@ -347,10 +361,31 @@ export default {
     },
     onclick() {
       this.$router.push({ path: "MyMusic" });
+    },
+    ilikeClick(name) {
+      let self = this;
+      var data = {
+        USER_CODE: "SYS",
+        MUSIC_NAME: name
+      };
+      fsCfg.postData(
+        this.$options.serverUrl.API_ADD_I_LIKE,
+        JSON.stringify(data),
+        function(res) {
+          if (res.success) {
+            for (let index = 0; index < self.musics.length; index++) {
+              const element = self.musics[index];
+              if (element.name == name) {
+                element.color = element.color == "red" ? "black" : "red";
+              }
+            }
+          }
+        }
+      );
     }
   },
   mounted: function() {
-    this.getall("All");
+    this.getall();
   }
 };
 </script>
