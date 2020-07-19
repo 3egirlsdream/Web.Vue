@@ -237,8 +237,8 @@ export default {
         "双笙",
         "买辣椒也用券"
       ],
-      musics: ["我乐意.mp3", "惊鸿一面.mp3", "许嵩 - 幻听.mp3"],
-      src: "http://www.endingisnihility.xyz/mp3/惊鸿一面.mp3",
+      musics: [],
+      src: null,
       detail: [], //详细文章信息
       active: 0,
       icon: {
@@ -248,7 +248,8 @@ export default {
       items: [], //文章列表
       position: 0,
       audio: null,
-      playlist: []
+      playlist: [],
+      prex :"http://www.endingisnihility.xyz/mp3/"
     };
   },
   methods: {
@@ -287,15 +288,31 @@ export default {
           var data = res.data;
           self.musics = data;
           self.active = 0;
+          self.src = self.prex + data[0].name;
         } else {
           Toast(res.message.content);
         }
       });
     },
     playEndedHandler: function() {
-      this.position++;
-      this.src = this.playlist[this.position % this.playlist.length];
-      this.audio.play();
+      let self = this;
+      try{
+        let self = this;
+        this.position++;
+        this.src = this.playlist[this.position % this.playlist.length];
+        this.audio.src = this.src;
+        setTimeout(()=>{
+          self.audio.play();
+        }, 1000)
+      }
+      catch{
+        this.position--;
+        setTimeout(() => {
+          self.playEndedHandler();
+        }, 1000);
+      }
+      
+      
     },
     ilikeClick(name) {
       let self = this;

@@ -273,7 +273,7 @@ div::-webkit-scrollbar {
       absolute
       horizontal
     >
-      <audio ref="audio" controls="controls" loop="loop" preload="auto" :src="src">
+      <audio ref="audio" preload="auto" controls="controls" :src="src">
         <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
         <!-- <source :src="src" type="audio/mpeg" /> -->
       </audio>
@@ -310,12 +310,8 @@ export default {
         "双笙",
         "买辣椒也用券"
       ],
-      musics: [
-        { name: "我乐意.mp3", color: "red" },
-        { name: "惊鸿一面.mp3", color: "black" },
-        { name: "许嵩 - 幻听.mp3", color: "red" }
-      ],
-      src: "http://www.endingisnihility.xyz/mp3/惊鸿一面.mp3",
+      musics: [],
+      src: null,
       detail: [], //详细文章信息
       active: 0,
       icon: {
@@ -332,7 +328,8 @@ export default {
       ],
       index: true, //控制主页的显影
       writes: false, //控制文章页的显影
-      dtl: false //控制详细文章的显影
+      dtl: false, //控制详细文章的显影
+      prex :'http://www.endingisnihility.xyz/mp3/'
     };
   },
   methods: {
@@ -353,6 +350,7 @@ export default {
             //data[i] = data[i].replace("../mp3\\", "");
           }
           self.musics = data;
+          self.src = self.prex + data[0].name;
           self.active = 0;
         } else {
           Toast(res.message.content);
