@@ -176,6 +176,12 @@ div::-webkit-scrollbar {
   z-index: 999;
   overflow: scroll;
 }
+
+.size {
+  width: 30px;
+  height: 30px;
+  margin: auto 1px;
+}
 </style>
 
 
@@ -206,6 +212,8 @@ div::-webkit-scrollbar {
       absolute
       horizontal
     >
+      <img class="size" src="../../../assets/img/music.png" v-show="!show"/>
+      <img class="size" src="../../../assets/img/music1.png" v-show="show"/>
       <audio ref="audio" controls="controls" preload="auto" :src="src">
         <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
         <!-- <source :src="src" type="audio/mpeg" /> -->
@@ -221,7 +229,7 @@ import fsCfg from "../../../assets/js/fw";
 export default {
   name: "Index",
   serverUrl: {
-    API_GET_I_LIKE: "/api/music/GetMusics/like={0}",
+    API_GET_I_LIKE: "/api/music/GetMusics/like={0}&start={1}&length={2}",
     API_ADD_I_LIKE: "/api/music/AddILike"
   },
   data() {
@@ -237,8 +245,8 @@ export default {
         "双笙",
         "买辣椒也用券"
       ],
-      musics: ["我乐意.mp3", "惊鸿一面.mp3", "许嵩 - 幻听.mp3"],
-      src: "http://www.endingisnihility.xyz/mp3/惊鸿一面.mp3",
+      musics: [],
+      src: "http://www.endingisnihility.xyz/mp3/许嵩 - 医生.mp3",
       detail: [], //详细文章信息
       active: 0,
       icon: {
@@ -248,27 +256,28 @@ export default {
       items: [], //文章列表
       position: 0,
       audio: null,
-      playlist: []
+      playlist: [],
+      show:true
     };
   },
   methods: {
     onclickPlay(item) {
       var self = this;
+      this.audio.addEventListener("ended", this.playEndedHandler, false);
       this.src = "http://www.endingisnihility.xyz/mp3/" + item;
+      //歌曲在列表中的顺序
+      var index = this.playlist.indexOf(this.src);
+      this.position = index;
       setTimeout(function() {
         self.$refs.audio.play();
       }, 1000);
     },
     playAll() {
       let self = this;
-      self.playlist = [];
-      var ao = self.$refs.audio;
-      this.audio = ao;
-      this.audio.addEventListener("ended", this.playEndedHandler, false);
-      this.musics.forEach(element => {
-        self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element.name);
-      });
-      this.audio.playlist = self.playlist;
+      //self.playlist = [];
+      //this.audio.addEventListener("ended", this.playEndedHandler, false);
+      
+      
       this.audio.position = 0;
       this.audio.src =
         self.playlist[self.audio.position % self.audio.playlist.length];
@@ -280,22 +289,29 @@ export default {
       let self = this;
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_I_LIKE,
-        "Y"
+        "Y", 0, 0
       );
       var res = fsCfg.getData(url, function(res) {
         if (res.success) {
           var data = res.data;
           self.musics = data;
           self.active = 0;
+          self.musics.forEach(element => {
+            self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element.name);
+          });
+          self.audio.playlist = self.playlist;
         } else {
           Toast(res.message.content);
         }
       });
     },
     playEndedHandler: function() {
+      let self = this;
       this.position++;
       this.src = this.playlist[this.position % this.playlist.length];
-      this.audio.play();
+      setTimeout(function() {
+        self.audio.play();
+      }, 1000);
     },
     ilikeClick(name) {
       let self = this;
@@ -322,6 +338,11 @@ export default {
 
   mounted: function() {
     this.getall("All");
+    this.audio = this.$refs.audio;
+    
+    setInterval(()=>{
+      this.show = !this.show;
+    }, 1000)
   }
 };
 </script>

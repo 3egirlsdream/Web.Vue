@@ -252,14 +252,16 @@ div::-webkit-scrollbar {
       <van-tab title="全部">
         <div class="page_construct_right" style="border-radius:25px;">
           <van-cell icon="audio" value="播放全部" clickable />
-          <van-row v-for="item in musics">
-            <van-col span="2" style="margin: 12px 0px 10px 10px;">
-              <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
-            </van-col>
-            <van-col span="16">
-              <van-cell :key="item.name" :title="item.name" @click="onclickPlay(item.name)" />
-            </van-col>
-          </van-row>
+          <van-list v-model="loading" :finished="finished" @load="getall">
+            <van-row v-for="item in musics">
+              <van-col span="2" style="margin: 12px 0px 10px 10px;">
+                <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
+              </van-col>
+              <van-col span="16">
+                <van-cell :key="item.name" :title="item.name" @click="onclickPlay(item.name)" />
+              </van-col>
+            </van-row>
+          </van-list>
         </div>
       </van-tab>
       <van-tab title="登录">
@@ -288,7 +290,7 @@ import fsCfg from "../../../assets/js/fw";
 export default {
   name: "Index",
   serverUrl: {
-    API_GET_ALL: "/api/music/GetMusics/like={0}",
+    API_GET_ALL: "/api/music/GetMusics/like={0}&start={1}&length={2}",
     API_ADD_I_LIKE: "/api/music/AddILike"
   },
   data() {
@@ -310,12 +312,10 @@ export default {
         "双笙",
         "买辣椒也用券"
       ],
-      musics: [
-        { name: "我乐意.mp3", color: "red" },
-        { name: "惊鸿一面.mp3", color: "black" },
-        { name: "许嵩 - 幻听.mp3", color: "red" }
-      ],
-      src: "http://www.endingisnihility.xyz/mp3/惊鸿一面.mp3",
+      finished:false,
+      loading:false,
+      musics: [],
+      src: "http://www.endingisnihility.xyz/mp3/许嵩 - 医生.mp3",
       detail: [], //详细文章信息
       active: 0,
       icon: {
@@ -345,19 +345,27 @@ export default {
     },
     getall() {
       let self = this;
-      var url = framework.strFormat(this.$options.serverUrl.API_GET_ALL, "N");
-      var res = fsCfg.getData(url, function(res) {
-        if (res.success) {
-          var data = res.data;
-          for (var i = 0; i < data.length; i++) {
-            //data[i] = data[i].replace("../mp3\\", "");
+      setTimeout(()=>{
+        var url = framework.strFormat(this.$options.serverUrl.API_GET_ALL, "N", 0, self.musics.length + 20);
+        var res = fsCfg.getData(url, function(res) {
+          if (res.success) {
+            var data = res.data.data;
+            // for (var i = 0; i < data.length; i++) {
+            //   //data[i] = data[i].replace("../mp3\\", "");
+            // }
+            // 加载状态结束
+            self.loading = false;
+            self.musics = data;
+            
+            if (self.musics.length >= res.data.total) {
+              self.finished = true;
+            }
+          } else {
+            Toast(res.message.content);
           }
-          self.musics = data;
-          self.active = 0;
-        } else {
-          Toast(res.message.content);
-        }
-      });
+        });
+      }, 1000);
+      //
     },
     onclick() {
       this.$router.push({ path: "MyMusic" });
@@ -385,6 +393,7 @@ export default {
     }
   },
   mounted: function() {
+    this.active = 0;
     this.getall();
   }
 };
