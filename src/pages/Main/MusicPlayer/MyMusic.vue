@@ -247,6 +247,7 @@ export default {
       ],
       musics: [],
       src: "http://www.endingisnihility.xyz/mp3/许嵩 - 医生.mp3",
+      src: null,
       detail: [], //详细文章信息
       active: 0,
       icon: {
@@ -257,7 +258,8 @@ export default {
       position: 0,
       audio: null,
       playlist: [],
-      show:true
+      show:true,
+      prex :"http://www.endingisnihility.xyz/mp3/"
     };
   },
   methods: {
@@ -300,6 +302,7 @@ export default {
             self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element.name);
           });
           self.audio.playlist = self.playlist;
+          self.src = self.prex + data[0].name;
         } else {
           Toast(res.message.content);
         }
@@ -312,6 +315,23 @@ export default {
       setTimeout(function() {
         self.audio.play();
       }, 1000);
+      try{
+        let self = this;
+        this.position++;
+        this.src = this.playlist[this.position % this.playlist.length];
+        this.audio.src = this.src;
+        setTimeout(()=>{
+          self.audio.play();
+        }, 1000)
+      }
+      catch{
+        this.position--;
+        setTimeout(() => {
+          self.playEndedHandler();
+        }, 1000);
+      }
+      
+      
     },
     ilikeClick(name) {
       let self = this;

@@ -275,7 +275,7 @@ div::-webkit-scrollbar {
       absolute
       horizontal
     >
-      <audio ref="audio" controls="controls" loop="loop" preload="auto" :src="src">
+      <audio ref="audio" preload="auto" controls="controls" :src="src">
         <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
         <!-- <source :src="src" type="audio/mpeg" /> -->
       </audio>
@@ -316,6 +316,8 @@ export default {
       loading:false,
       musics: [],
       src: "http://www.endingisnihility.xyz/mp3/许嵩 - 医生.mp3",
+      musics: [],
+      src: null,
       detail: [], //详细文章信息
       active: 0,
       icon: {
@@ -332,7 +334,8 @@ export default {
       ],
       index: true, //控制主页的显影
       writes: false, //控制文章页的显影
-      dtl: false //控制详细文章的显影
+      dtl: false, //控制详细文章的显影
+      prex :'http://www.endingisnihility.xyz/mp3/'
     };
   },
   methods: {
@@ -365,7 +368,6 @@ export default {
           }
         });
       }, 1000);
-      //
     },
     onclick() {
       this.$router.push({ path: "MyMusic" });
