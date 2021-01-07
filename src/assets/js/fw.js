@@ -4,14 +4,35 @@ import Axios from "axios";
 const fsCfg = {
     serverAddr: function () {
         if (window.location.hostname === 'localhost')
-            return 'https://localhost:44361'
-        else if (window.location.protocol === 'http:') {
+            return 'https://localhost:44389'
+         else if (window.location.protocol === 'http:') {
             return 'http://47.107.186.141:4396'
-        }
+         }
         return ''
     },
-    getData: function (url, callback) {
+    getDataWithoutCheck: function (url, callback) {
         console.log('GET URL:' + url)
+        Axios.get(url)
+          .then(function (response) {
+            if (response != null) {
+                setTimeout(
+                    function (clbk, msg) {
+                        clbk(msg)
+                    },
+                    100,
+                    callback,
+                    response.data
+                )
+            }
+        })
+          // 请求失败
+          .catch(error => {
+            console.log(error);
+            alert("网络错误")
+          });
+      },
+    getData: function (url, callback) {
+        console.log('GET URL:' + this.serverAddr() + url)
         let user = 'cxk'//framework.getStorage('user');
         let pwd = '123455'//framework.getStorage('pwd')
         let u = framework.strFormat('/api/values/login/user={0}&pwd={1}', user, pwd);
@@ -68,6 +89,27 @@ const fsCfg = {
                 alert(error);
             });
     },
+
+    uploadImage: function (filepath, data, callback) {
+        var url = "https://gitee.com/api/v5/repos/eeegirlsdream/picture/contents/" + filepath;
+        Axios.post(url, data, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(function (response) {
+            if (response != null) {
+                setTimeout(function (clbk, msg) {
+                    clbk(msg),
+                        100,
+                        callback,
+                        response.data
+                })
+            }
+        }).catch(function (error) {
+            alert(error);
+        });
+    },
+
     isLogin: function () {
 
     }

@@ -14,7 +14,11 @@ import {
   DataTable
 } from 'muse-ui';
 import 'muse-ui/dist/muse-ui.css';
+import '../../../assets/css/style.css'
+import Vuetify from 'vuetify'
+import 'vuetify/dist/vuetify.min.css'
 
+Vue.use(Vuetify);
 import _ from 'lodash'
 Vue.prototype._ = _
 
@@ -23,5 +27,6 @@ Vue.use(DataTable);
 
 new Vue({
   router,
+  vuetify: new Vuetify(),
   render: h => h(App)
 }).$mount('#app')
