@@ -3,7 +3,7 @@ import './framework'
 import Axios from "axios";
 const fsCfg = {
     serverAddr: function () {
-        if (window.location.hostname === 'localhost')
+        if (window.location.hostname === 'localhost1')
             return 'https://localhost:44389'
          else if (window.location.protocol === 'http:') {
             return 'http://47.107.186.141:4396'
@@ -28,7 +28,7 @@ const fsCfg = {
           // 请求失败
           .catch(error => {
             console.log(error);
-            alert("网络错误")
+            console.log("网络错误")
           });
       },
     getData: function (url, callback) {
@@ -59,7 +59,7 @@ const fsCfg = {
             })
             // 请求失败
             .catch(error => {
-                alert(error);
+                console.log(error);
                 const index = location.href.lastIndexOf("/pages");
                 const urlBase = location.href.substring(0, index);
                 window.location.href = urlBase + "/pages/SYSTEM/Login.html";
@@ -86,9 +86,33 @@ const fsCfg = {
                 }
             })
             .catch(function (error) {
-                alert(error);
+                console.log(error);
             });
     },
+
+    postDataWithoutCheck: function (url, data, callback) {
+        Axios.post(url, data, {
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+            .then(function (response) {
+                if (response != null) {
+                    setTimeout(
+                        function (clbk, msg) {
+                            clbk(msg)
+                        },
+                        100,
+                        callback,
+                        response.data
+                    )
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    },
+
 
     uploadImage: function (filepath, data, callback) {
         var url = "https://gitee.com/api/v5/repos/eeegirlsdream/picture/contents/" + filepath;
@@ -98,15 +122,24 @@ const fsCfg = {
             }
         }).then(function (response) {
             if (response != null) {
-                setTimeout(function (clbk, msg) {
-                    clbk(msg),
-                        100,
-                        callback,
-                        response.data
-                })
+                setTimeout(
+                    function (clbk, msg) {
+                        clbk(msg)
+                    },
+                    100,
+                    callback,
+                    response.data
+                )
             }
         }).catch(function (error) {
-            alert(error);
+            setTimeout(
+                function (clbk, msg) {
+                    clbk(msg)
+                },
+                100,
+                callback,
+                error.response.status
+            )
         });
     },
 

@@ -32,22 +32,18 @@
     <div style="padding-top:50px;">
       <van-cell-group style="margin:15px;">
         <van-field v-model="user" placeholder="请输入用户名" :clearable="true" style="height:48px;"/>
+        <van-field v-model="sendto" placeholder="请输入聊天用户" :clearable="true" style="height:48px;"/>
       </van-cell-group>
-      <van-password-input :value="value" info="密码为 6 位数字" @focus="showKeyboard = true"/>
+      <!-- <van-password-input :value="value" info="密码为 6 位数字" @focus="showKeyboard = true"/>
       <van-number-keyboard
         :show="showKeyboard"
         @input="onInput"
         @delete="onDelete"
         @blur="showKeyboard = false"
-      />
+      /> -->
       <van-row type="flex" style="padding:15px;">
-        <van-button type="warning" size="large" @click="login" style="margin-top:5px;">登录</van-button>
-        <van-col span="12" style="padding-right:10px;">
-          <van-button type="primary" size="large" @click="register" style="margin-top:5px;">注册</van-button>
-        </van-col>
-        <van-col span="12" style="padding-left:10px;">
-          <van-button type="info" size="large" @click="edit" style="margin-top:5px;">修改用户信息</van-button>
-        </van-col>
+        <!-- <van-button type="primary" size="large" @click="register">注册</van-button> -->
+        <van-button type="warning" size="large" @click="login">登录</van-button>
       </van-row>
     </div> 
   </div>
@@ -71,7 +67,7 @@ export default {
       showKeyboard: true,
       value: "",
       user: "",
-      isedit:false
+      sendto:""
     };
   },
   methods: {
@@ -87,46 +83,32 @@ export default {
           window.location.href = urlBase + "/SYSTEM/Signup.html"
           console.log(response);
     },
-    edit: function(){
-      this.isedit = true;
-      if(this.user === '' || this.value === ''){
-        Toast("请先登录！");
-        return;
-      }else{
-        this.login();
-      }
-
-    },
     login: function() {
       let self = this;
-      var url = framework.strFormat(
-        this.$options.serviceUrl.API_LOGIN,
-        this.user,
-        this.value
-      );
+      // var url = framework.strFormat(
+      //   this.$options.serviceUrl.API_LOGIN,
+      //   this.user,
+      //   this.value
+      // );
       framework.setStorage('user', self.user);
       framework.setStorage('pwd', self.value);
       framework.setStorage("login", "YES");
+      framework.setStorage('sendto', self.sendto);
       
-      fsCfg.getData(url, function(res){
-        if(res.success){
-          Toast(res.data.Message);
-          framework.setStorage('displayname', res.data.data.DISPLAY_NAME);
-          framework.setStorage('myimg', res.data.data.IMG);
-          console.log(res.data.data.DISPLAY_NAME);
-          const index = location.href.lastIndexOf("/SYSTEM");
-          const urlBase = location.href.substring(0, index);
-          if(self.isedit){
-            window.location.href = urlBase + "/SYSTEM/Signup.html#/?isedit=Y";
-          }
-          else {
-            window.location.href = urlBase + "/Chat/Index.html"
-          }
-        }
-        else{
-          Toast(res.message.content);
-        }
-      });
+      const index = location.href.lastIndexOf("/Chat");
+      const urlBase = location.href.substring(0, index);
+      window.location.href = urlBase + "/Chat/Index.html#/"
+      // fsCfg.getData(url, function(res){
+      //   if(res.success){
+      //     Toast(res.data);
+      //     const index = location.href.lastIndexOf("/SYSTEM");
+      //     const urlBase = location.href.substring(0, index);
+      //     window.location.href = urlBase + "/INDEX/WebApp.html"
+      //   }
+      //   else{
+      //     Toast(res.message.content);
+      //   }
+      // });
       
     }
   },

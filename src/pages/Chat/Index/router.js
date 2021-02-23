@@ -10,6 +10,13 @@ const routes = [{
     title: ''
   },
   component: resolve => require(['./Index'], resolve)
+},{
+  name: 'Close',
+  path: '/Close',
+  meta: {
+    title: ''
+  },
+  component: resolve => require(['./Close'], resolve)
 }];
 
 const router = new Router({

@@ -52,10 +52,10 @@
       </div>
 
       <!-- body -->
-      <div v-for="item in items" style=" margin-top:100px;">
+      <div v-for="item in items" style=" margin-top:100px;" :key="item">
         <div style="box-shadow:2px 2px 10px rgb(37, 36, 36);width:70%;height:500px;margin:auto;border-radius: 2px;">
           <div style="font-size:25px;height:40px;">{{item.title}}</div>
-          <div style="font-size:20px;text-align:left;padding:10px;height:120px;overflow:hidden">&nbsp&nbsp&nbsp{{item.content}}</div>
+          <div style="font-size:20px;text-align:left;padding:10px;height:120px;overflow:hidden">&nbsp;&nbsp;&nbsp;{{item.content}}</div>
           <div style="font-size:15px;text-align:right;color:gray;height:40px; margin-right:20px;">{{item.date}}</div>
         </div>
       </div>

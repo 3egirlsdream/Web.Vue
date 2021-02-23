@@ -3599,7 +3599,7 @@ pre .selector-id {
 }
 .article-tag-list-link {
   display: block;
-  padding: 0 4px;
+  padding: 6px 4px;
   line-height: 13px;
   color: rgba(255, 255, 255, 0.8);
   -webkit-transition: 0.2s ease-in-out;

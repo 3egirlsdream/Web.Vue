@@ -5,22 +5,26 @@ import {
   router
 } from './router'
 
+
 import '../../../assets/js/base';
 import 'vant/lib/index.less';
 import querystring from 'querystring'
 Vue.prototype.$qs = querystring;
-import {
-  DataTable
-} from 'muse-ui';
-import 'muse-ui/dist/muse-ui.css';
-//import $ from "jquery";
+
+import fsCfg from '../../../assets/js/fw'
+
 
 import _ from 'lodash'
+import * as signalR from "@microsoft/signalr";
+import { Notify } from 'vant';
+
+// 全局注册
+Vue.use(Notify);
+Vue.use(signalR)
 Vue.prototype._ = _
-import echarts from 'echarts'
-Vue.prototype.$echarts = echarts 
+Vue.use(fsCfg);
 Vue.use(Vant);
-Vue.use(DataTable);
+
 
 new Vue({
   router,
