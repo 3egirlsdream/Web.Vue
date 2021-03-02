@@ -1,138 +1,130 @@
 <template>
-  
-  <v-app>
-    <section>
-          <v-app-bar
-            color="deep-purple accent-4"
-            dense
+  <v-card
+    max-width="400"
+    class="mx-auto"
+  >
+    <v-system-bar
+      color="pink darken-2"
+      dark
+    >
+      <v-spacer></v-spacer>
+
+      <v-icon>mdi-window-minimize</v-icon>
+
+      <v-icon>mdi-window-maximize</v-icon>
+
+      <v-icon>mdi-close</v-icon>
+    </v-system-bar>
+
+    <v-app-bar
+      dark
+      color="pink"
+    >
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+
+      <v-toolbar-title>My Music</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <v-btn icon>
+        <v-icon>mdi-magnify</v-icon>
+      </v-btn>
+    </v-app-bar>
+
+    <v-container>
+      <v-row dense>
+        <v-col cols="12">
+          <v-card
+            color="#385F73"
             dark
           >
-            <v-app-bar-nav-icon></v-app-bar-nav-icon>
-            <v-spacer></v-spacer>
+            <v-card-title class="headline">
+              Unlimited music now
+            </v-card-title>
 
-            <v-btn icon>
-              <v-icon>mdi-heart</v-icon>
-            </v-btn>
+            <v-card-subtitle>Listen to your favorite artists and albums whenever and wherever, online and offline.</v-card-subtitle>
 
-            <v-btn icon>
-              <v-icon>mdi-magnify</v-icon>
-            </v-btn>
+            <v-card-actions>
+              <v-btn text>
+                Listen Now
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
 
-              <van-popover
-                placement="bottom-end"
-                style="margin-top:-0.1em;"
-                v-model="showPopover"
-                trigger="click"
-                :actions="actions"
-                @select="onSelect"
-                >
-                <template #reference>
-                  <v-btn icon>
-                    <v-icon>mdi-dots-vertical</v-icon>
+        <v-col
+          v-for="(item, i) in items"
+          :key="i"
+          cols="12"
+        >
+          <v-card
+            :color="item.color"
+            dark
+          >
+            <div class="d-flex flex-no-wrap justify-space-between">
+              <div>
+                <v-card-title
+                  class="headline"
+                  v-text="item.title"
+                ></v-card-title>
+
+                <v-card-subtitle v-text="item.artist"></v-card-subtitle>
+
+                <v-card-actions>
+                  <v-btn
+                    v-if="item.artist === 'Ellie Goulding'"
+                    class="ml-2 mt-3"
+                    fab
+                    icon
+                    height="40px"
+                    right
+                    width="40px"
+                  >
+                    <v-icon>mdi-play</v-icon>
                   </v-btn>
-                </template>
-              </van-popover>
-          </v-app-bar>
-      <!-- <div style="height:1.5em;background:lightgray;margin-top:-10px;">
-        
-      </div> -->
-      
-    </section>
 
-    <section style="margin-top:0.5em;">
-      <template>
-        <v-row
-          v-for="room in rooms" :key="room.ID"
-          height="1.2em"
-          class="mx-auto"
-          @click="gotochat(room)"
-        >
-        <div style="width:1.2em;padding:5px; margin-top:-10px">
-          <v-img
-              :lazy-src="room.img"
-              max-height="38"
-              max-width="38"
-              :src="room.img"
-            ></v-img>
-        </div>
-        <div style="height:1.2em;padding:2px;width:85%">
-          <div style="font-size:0.4em;line-height:1.2em;height:1.2em;"> &nbsp; {{room.name}}</div>
-          <div style="font-size:0.3em;line-height:1.2em;height:1.2em;text-align:right"> &nbsp; ...</div>
-          <v-divider></v-divider>
-        </div>   
-            
-        </v-row>
-      </template>
-    </section>
-    
-    <van-dialog v-model="show" title="" @confirm="confirm()">
-      <van-cell-group>
-        <van-field
-          v-model="room_number"
-          label="群聊号"
-          placeholder="请输入群聊号"
-        />
-        <van-field
-          v-model="room_name"
-          label="房间名"
-          placeholder="请输入房间名"
-        />
-      </van-cell-group>
-    </van-dialog>
-    <van-dialog v-model="addfriend" title="" @confirm="confirm_add()">
-      <van-cell-group>
-        <van-field
-          v-model="room_number"
-          label="联系人账号"
-          placeholder="请输入联系人账号"
-        />
-      </van-cell-group>
-    </van-dialog>
-    <section class="footer" style="position: fixed; bottom: 0px; width: 100%;text-align: center;overflow: hidden;">
-      <template>
-        <v-bottom-navigation
-          max-height="2em"
-          v-model="value"
-          :background-color="color"
-          dark
-          shift
-        >
-          <v-btn>
-            <span style="font-size:10px">聊天</span>
-            <v-icon>mdi-message-text</v-icon>
-          </v-btn>
+                  <v-btn
+                    v-else
+                    class="ml-2 mt-5"
+                    outlined
+                    rounded
+                    small
+                  >
+                    START RADIO
+                  </v-btn>
+                </v-card-actions>
+              </div>
 
-          <v-btn>
-            <span style="font-size:10px">联系人</span>
-            <v-icon>mdi-account</v-icon>
-          </v-btn>
-
-          <v-btn>
-            <span style="font-size:10px">设置</span>
-            <v-icon>mdi-wrench</v-icon>
-          </v-btn>
-        </v-bottom-navigation>
-      </template>
-    </section>
-    
-  </v-app>
+              <v-avatar
+                class="ma-3"
+                size="125"
+                tile
+              >
+                <v-img :src="item.src"></v-img>
+              </v-avatar>
+            </div>
+          </v-card>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-card>
 </template>
 
 <script>
 import fsCfg from "../../../assets/js/fw";
 import util from "../../../assets/js/util";
 import * as signalR from "@microsoft/signalr";
-// let hubUrl = "https://localhost:44351/chatHub";
-// // .net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
-// const connection = new signalR.HubConnectionBuilder()
-//   .withAutomaticReconnect([0, 3000, 5000, 10000, 15000, 30000])
-//   .withUrl(hubUrl)
-//   .build();
-// connection.onreconnecting((error) => {
-//   const status = 'Connection lost due to error "${error}"';
-//   console.log(error);
-// });
-// connection.start().catch();
+let hubUrl = "https://localhost:44351/chatHub";
+// .net core 版本中默认不会自动重连，需手动调用 withAutomaticReconnect
+const connection = new signalR.HubConnectionBuilder()
+  .withAutomaticReconnect([0, 3000, 5000, 10000, 15000, 30000])
+  .withUrl(hubUrl)
+  .build();
+connection.onreconnecting((error) => {
+  const status = 'Connection lost due to error "${error}"';
+  console.log(error);
+});
+connection.start().catch();
 export default {
   name: "chatlist",
   serviceUrl: {
@@ -141,7 +133,20 @@ export default {
   },
   data() {
     return {
-      value: 0,
+      items: [
+        {
+          color: '#1F7087',
+          src: 'https://cdn.vuetifyjs.com/images/cards/foster.jpg',
+          title: 'Supermodel',
+          artist: 'Foster the People',
+        },
+        {
+          color: '#952175',
+          src: 'https://cdn.vuetifyjs.com/images/cards/halcyon.png',
+          title: 'Halcyon Days',
+          artist: 'Ellie Goulding',
+        },
+      ],
       addfriend:false,
       username:framework.getStorage('user'),
       displayname: framework.getStorage("displayname"),
@@ -149,7 +154,7 @@ export default {
        room_number:'',
        room_name:'',
        showPopover: false,
-       actions: [{ text: '添加群聊' }, { text: '添加联系人' }],
+       actions: [{ text: '添加群聊' }, { text: '添加联系人' }, { text: '选项三' }],
        rooms:[]
     };
   },
@@ -194,16 +199,13 @@ export default {
       fsCfg.getData(url, function(res){
         if(res.success){
           self.rooms = [];
-          
           for (let index = 0; index < res.data.length; index++) {
-            let element = res.data[index];
-            let rm = {
+            const element = res.data[index];
+            var room = {
               number:element.GROUP_ID,
-              name:element.GROUP_NAME,
-              img:element.ID == undefined ? 'https://img01.yzcdn.cn/vant/logo.png' : element.ID
+              name:element.GROUP_NAME
             };
-            self.rooms.push(rm);
-            
+            self.rooms.push(room);
           }
         }
         else{
@@ -216,16 +218,6 @@ export default {
     var _this = this;
     this.initGroup();
   },
-  computed: {
-      color () {
-        switch (this.value) {
-          case 0: return 'indigo'
-          case 1: return 'teal'
-          case 2: return 'brown'
-          default: return 'blue-grey'
-        }
-      },
-  }
 };
 </script>
 

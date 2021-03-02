@@ -12,7 +12,7 @@ import querystring from 'querystring'
 Vue.prototype.$qs = querystring;
 
 import fsCfg from '../../../assets/js/fw'
-
+import vuetify from '../../../plugins/vuetify';
 
 import _ from 'lodash'
 import * as signalR from "@microsoft/signalr";
@@ -28,5 +28,9 @@ Vue.use(Vant);
 
 new Vue({
   router,
+  vuetify,
+  components: {
+    App
+  },
   render: h => h(App)
 }).$mount('#app')

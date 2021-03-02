@@ -29,11 +29,16 @@
 <template>
   <div class="pages">
     <div>
+      <van-nav-bar
+        title="个人信息"
+        left-arrow
+        @click-left="$router.go(-1)"
+      />
       <van-cell-group>
         <van-cell
           title="头像"
-          title-style="text-align:left;line-height:30px"
-          is-link
+          title-style="text-align:left;line-height:3em"
+          
         >
           <label>
             <input
@@ -44,7 +49,7 @@
               style="opacity:0;width:0;"
               accept="image/*"
             />
-            <van-icon :name="headImg" size="20px" />
+            <van-icon :name="headImg" size="3em" />
           </label>
         </van-cell>
         <van-field

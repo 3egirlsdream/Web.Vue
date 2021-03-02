@@ -11,12 +11,19 @@ const routes = [{
   },
   component: resolve => require(['./Index'], resolve)
 },{
-  name: 'Close',
-  path: '/Close',
+  name: 'ChatList',
+  path: '/ChatList',
   meta: {
     title: ''
   },
-  component: resolve => require(['./Close'], resolve)
+  component: resolve => require(['./ChatList'], resolve)
+},{
+  name: 'Chat',
+  path: '/Chat',
+  meta: {
+    title: ''
+  },
+  component: resolve => require(['./Chat'], resolve)
 }];
 
 const router = new Router({

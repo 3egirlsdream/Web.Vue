@@ -60,7 +60,8 @@ export default {
   name: "Index",
   serviceUrl: {
     API_REGISTER: "http://47.107.186.141:4396/api/values/",
-    API_LOGIN: "/api/values/login/user={0}&pwd={1}"
+    API_LOGIN: "/api/values/login/user={0}&pwd={1}",
+    API_INIT_GROUP:"/api/values/GetChatList?username={0}"
   },
   data() {
     return {
@@ -98,18 +99,21 @@ export default {
       const index = location.href.lastIndexOf("/Chat");
       const urlBase = location.href.substring(0, index);
       window.location.href = urlBase + "/Chat/Index.html#/"
-      // fsCfg.getData(url, function(res){
-      //   if(res.success){
-      //     Toast(res.data);
-      //     const index = location.href.lastIndexOf("/SYSTEM");
-      //     const urlBase = location.href.substring(0, index);
-      //     window.location.href = urlBase + "/INDEX/WebApp.html"
-      //   }
-      //   else{
-      //     Toast(res.message.content);
-      //   }
-      // });
       
+      
+    },
+    initGroup(){
+      fsCfg.getData(url, function(res){
+        if(res.success){
+          Toast(res.data);
+          const index = location.href.lastIndexOf("/SYSTEM");
+          const urlBase = location.href.substring(0, index);
+          window.location.href = urlBase + "/INDEX/WebApp.html"
+        }
+        else{
+          Toast(res.message.content);
+        }
+      });
     }
   },
   mounted: function() {

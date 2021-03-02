@@ -85,7 +85,6 @@ export default {
           const index = location.href.lastIndexOf("/SYSTEM");
           const urlBase = location.href.substring(0, index);
           window.location.href = urlBase + "/SYSTEM/Signup.html"
-          console.log(response);
     },
     edit: function(){
       this.isedit = true;
@@ -120,7 +119,7 @@ export default {
             window.location.href = urlBase + "/SYSTEM/Signup.html#/?isedit=Y";
           }
           else {
-            window.location.href = urlBase + "/Chat/Index.html"
+            window.location.href = urlBase + "/Chat/Index.html#/ChatList"
           }
         }
         else{
