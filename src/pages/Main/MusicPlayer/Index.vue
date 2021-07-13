@@ -288,7 +288,7 @@ div::-webkit-scrollbar {
     <div style="margin-left:5vh;margin-top:1vh;"> 
       <van-cell-group>
         <van-field v-model="searchText" label="" right-icon="search" laceholder="" @click="search"/>
-        <van-row v-for="item in musics_after_search">
+        <van-row v-for="(item, index) in musics_after_search" :key="index">
           <van-col span="2" style="margin: 12px 0px 10px 10px;">
             <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
           </van-col>
