@@ -279,7 +279,7 @@ export default {
       //self.playlist = [];
       //this.audio.addEventListener("ended", this.playEndedHandler, false);
       
-      
+      this.position = 0;
       this.audio.position = 0;
       this.audio.src =
         self.playlist[self.audio.position % self.audio.playlist.length];
@@ -309,12 +309,6 @@ export default {
       });
     },
     playEndedHandler: function() {
-      let self = this;
-      this.position++;
-      this.src = this.playlist[this.position % this.playlist.length];
-      setTimeout(function() {
-        self.audio.play();
-      }, 1000);
       try{
         let self = this;
         this.position++;
@@ -359,7 +353,7 @@ export default {
   mounted: function() {
     this.getall("All");
     this.audio = this.$refs.audio;
-    
+    this.audio.addEventListener("ended", this.playEndedHandler, false);
     setInterval(()=>{
       this.show = !this.show;
     }, 1000)
