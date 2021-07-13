@@ -212,7 +212,7 @@ div::-webkit-scrollbar {
 
 <template>
   <div class="pages">
-    <van-tabs v-model="active" animated>
+    <van-tabs v-model="active" animated @click="tabClick">
       <van-tab title="我的" style="background:white;">
         <div style="margin:15px; border-radius:10px; height:15vh;">
           <van-swipe
@@ -264,7 +264,7 @@ div::-webkit-scrollbar {
           </van-list>
         </div>
       </van-tab>
-      <van-tab title="登录">
+      <van-tab title="搜索">
         
       </van-tab>
     </van-tabs>
@@ -280,7 +280,28 @@ div::-webkit-scrollbar {
         <!-- <source :src="src" type="audio/mpeg" /> -->
       </audio>
     </v-bottom-navigation>
+
+
+    
+  <!-- 搜索 -->
+  <van-popup v-model="searchShow" position="bottom" :style="{height:'100%', width:'100%'}" close-icon-position="top-left" closeable close-icon="arrow-left">
+    <div style="margin-left:5vh;margin-top:1vh;"> 
+      <van-cell-group>
+        <van-field v-model="searchText" label="" right-icon="search" laceholder="" @click="search"/>
+        <van-row v-for="item in musics_after_search">
+          <van-col span="2" style="margin: 12px 0px 10px 10px;">
+            <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
+          </van-col>
+          <van-col span="16">
+            <van-cell :key="item.name" :title="item.name"/>
+          </van-col>
+      </van-row>
+      </van-cell-group>
+    </div>
+  </van-popup>
+
   </div>
+
 </template>
 
 
@@ -291,7 +312,8 @@ export default {
   name: "Index",
   serverUrl: {
     API_GET_ALL: "/api/music/GetMusics/like={0}&start={1}&length={2}",
-    API_ADD_I_LIKE: "/api/music/AddILike"
+    API_ADD_I_LIKE: "/api/music/AddILike",
+    API_SEARCH:"/api/music/Search/value={0}"
   },
   data() {
     return {
@@ -312,6 +334,9 @@ export default {
         "双笙",
         "买辣椒也用券"
       ],
+      musics_after_search:[],
+      searchText:'',
+      searchShow:false,
       finished:false,
       loading:false,
       src: "http://www.endingisnihility.xyz/mp3/许嵩 - 医生.mp3",
@@ -391,6 +416,42 @@ export default {
           }
         }
       );
+    },
+    tabClick(name, title){
+      if(title == "搜索"){
+        this.searchShow = true;
+      }
+    },
+    ilikeClick(name) {
+      let self = this;
+      var data = {
+        USER_CODE: "SYS",
+        MUSIC_NAME: name
+      };
+      fsCfg.postData(
+        this.$options.serverUrl.API_ADD_I_LIKE,
+        JSON.stringify(data),
+        function(res) {
+          if (res.success) {
+            for (let index = 0; index < self.musics_after_search.length; index++) {
+              const element = self.musics_after_search[index];
+              if (element.name == name) {
+                element.color = element.color == "red" ? "black" : "red";
+              }
+            }
+          }
+        }
+      );
+    },
+    search(){
+      if(this.searchText == '') return;
+      let self = this;
+      fsCfg.getData(framework.strFormat(this.$options.serverUrl.API_SEARCH, this.searchText), function(result)
+      {
+        if(result.success){
+          self.musics_after_search = result.data;
+        }
+      })
     }
   },
   mounted: function() {
