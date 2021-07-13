@@ -71,7 +71,7 @@ import fsCfg from "../../../assets/js/fw";
 export default {
   name: "Index",
   serverUrl: {
-    API_GET_ALL_ARTICLE: "/api/article/user={0}"
+    API_GET_ALL_ARTICLE: "/api/article/GetAllArticle?user={0}"
   },
   data() {
     return {

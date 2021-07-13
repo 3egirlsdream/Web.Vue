@@ -10,6 +10,20 @@ const routes = [{
     title: ''
   },
   component: resolve => require(['./Index'], resolve)
+},{
+  name: 'ChatList',
+  path: '/ChatList',
+  meta: {
+    title: ''
+  },
+  component: resolve => require(['./ChatList'], resolve)
+},{
+  name: 'Chat',
+  path: '/Chat',
+  meta: {
+    title: ''
+  },
+  component: resolve => require(['./Chat'], resolve)
 }];
 
 const router = new Router({

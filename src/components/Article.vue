@@ -14,7 +14,7 @@
   box-shadow: 1px 1px 2px lightgray;
 }
 .page_construct_left {
-  width: 15%;
+  width: 20%;
   height: 100vh;
   float: left;
   background: #fcfcfc;
@@ -58,12 +58,12 @@ div::-webkit-scrollbar {
 .textdiv {
   float: right;
   margin-right: 5vh;
-  font-family: "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei",sans-serif;
+  //font-family: 'Consolas' 'Arial', 'Helvetica', '微软等线Light';
   //overflow-x: hidden;
   cursor: pointer;
   transition: all 0.2s linear;
   color: #000;
-  font-weight: 300;
+  font-weight: 1;
 }
 
 .a_underline {
@@ -144,7 +144,7 @@ div::-webkit-scrollbar {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial,
     sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
   margin-left: 4vh;
-  font-size: 0.5em;
+  font-size: 16px;
   font-weight: bold;
 }
 .detail_article_content {
@@ -193,7 +193,7 @@ div::-webkit-scrollbar {
             class="textdiv"
             :style="{ 'line-height': item.height, 'font-size': item.fontsize }"
           >
-            <img style="margin-right:20px; margin-bottom:5px;" :src="item.src" height="auto" width="auto"/>{{ item.title }}
+            {{ item.title }}
           </div>
         </div>
         <div class="powered_by_style">Powered by .NetCore & Vue</div>
@@ -226,7 +226,7 @@ div::-webkit-scrollbar {
                 v-for="category in categories"
                 @click="focused(category)"
                 v-bind:class="{ active: category.checked }"
-                style="-webkit-order: -1; order: -1;margin-top:5.5em"
+                style="-webkit-order: -1; order: -1;margin-top:2.5em"
                 class="tags-list-item waves-effect waves-button waves-light "
                 >{{ category.name }}</a>
             </nav>
@@ -267,11 +267,12 @@ div::-webkit-scrollbar {
             <br />
 
             <div class="category_border_style">
-              <li class="article-tag-list-item" v-for="ac in detail.categories">
+              <li class="article-tag-list-item">
                 <a
                   class="article-tag-list-link waves-effect waves-button"
                   rel="tag"
-                  >{{ ac }}</a>
+                  >{{ detail.CATEGORY_NAME }}</a
+                >
               </li>
               <br style="clear:both;" />
             </div>
@@ -288,14 +289,12 @@ div::-webkit-scrollbar {
 
 <script>
 import { Toast } from "vant";
-import fsCfg from "../../../assets/js/fw";
+import fsCfg from "../assets/js/fw";
 import marked from "marked";
-//import { vuetify } from "vuetify";
 export default {
   name: "Index",
   serverUrl: {
     API_GET_ALL_ARTICLE: "/api/article/user={0}&category={1}",
-    API_GET_CONTENT: "/api/article/id={0}",
     API_GET_ALL_ARTICLE_TO_PAGE: "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
   },
   data() {
@@ -304,31 +303,20 @@ export default {
       detail: [], //详细文章信息
       navigation: [
         {
-          title: "",
+          title: "3egirlsdream",
           content: "content",
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "15vh",
-          fontsize: "16px",
-          src:""
+          fontsize: "3.5vh",
         },
         {
-          title: "主页",
+          title: "Articles",
           content: "content",
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "5vh",
-          fontsize: "16px",
-          src:"https://gitee.com/eeegirlsdream/picture/raw/master/aticle/20210112094844.png"
-        },
-        {
-          title: "分类",
-          content: "content",
-          date: "2019/09/24 10:10:10",
-          background: "#fff",
-          height: "5vh",
-          fontsize: "16px",
-          src:"https://gitee.com/eeegirlsdream/picture/raw/master/aticle/20210112095145.png"
+          fontsize: "2.5vh",
         },
         {
           title: "About",
@@ -336,8 +324,7 @@ export default {
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "5vh",
-          fontsize: "16px",
-          src:""
+          fontsize: "2.5vh",
         },
         {
           title: "Photograph",
@@ -345,8 +332,7 @@ export default {
           date: "2019/09/24 10:10:10",
           background: "#fff",
           height: "5vh",
-          fontsize: "16px",
-          src:""
+          fontsize: "2.5vh",
         },
       ],
       items: [], //文章列表
@@ -375,32 +361,18 @@ export default {
       this.index = false;
       this.writes = false;
       this.dtl = false;
-      if (item.title == "主页") this.index = true;
-      else if (item.title == "分类"){ 
+      if (item.title == "3egirlsdream") this.index = true;
+      else if (item.title == "Articles"){ 
         this.writes = true;
         this.getArticleToPage();
       }
     },
 
     toDetail(item) {
-      this.detail.ARTICLE_NAME = item.ARTICLE_NAME;
+      this.detail = item;
       this.index = false;
       this.writes = false;
       this.dtl = true;
-      let self = this;
-      var url = framework.strFormat(
-        this.$options.serverUrl.API_GET_CONTENT,
-        item.ID
-      );
-      fsCfg.getData(url, function(res) {
-        if (res.success) {
-          self.detail = res.data;
-          
-            self.detail.DATETIME_CREATED = self.detail.DATETIME_CREATED.replace("T", " ");
-            self.detail.CONTENT_TRANSFERED = marked(self.detail.CONTENT);
-            self.detail.categories = self.detail.ARTICLE_CATEGORY.split(';');
-        }
-      })
     },
     getAllArticle() {
       let self = this;
@@ -412,20 +384,17 @@ export default {
         if (res.success) {
           self.items = res.data;
           self.categories = [{ name: "全部", checked: true }];
-          let temp = [];
           for (let index = 0; index < res.data.length; index++) {
             const element = res.data[index];
-            
-              var ca = element.ARTICLE_CATEGORY.split(';');
-              ca.forEach(x=>{
-                if(!temp.includes(x)) temp.push(x);
-              });
+            var count = 0;
+            self.categories.forEach((c) => {
+              if (c.name == element.CATEGORY_NAME) count++;
+            });
+            var m = { name: element.CATEGORY_NAME, checked: false };
+            if (count == 0) {
+              self.categories.push(m);
+            }
           }
-          temp.forEach(c=>{
-            var m = { name: c, checked: false };
-            self.categories.push(m);
-          })
-
           for (let i = 0; i < self.items.length; i++) {
             self.items[i].DATETIME_CREATED = self.items[i].DATETIME_CREATED.replace("T", " ");
             self.items[i].INDEX_CONTENT = self.items[i].CONTENT.replace(
@@ -450,7 +419,7 @@ export default {
       }
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_ALL_ARTICLE_TO_PAGE,
-        "cxk", encodeURIComponent(category), 0, 9999
+        "cxk", category, 0, 9999
       );
       fsCfg.getData(url, function(res) {
         if (res.success) {
@@ -470,7 +439,7 @@ export default {
     link.type = "text/css";
     link.rel = "stylesheet";
     link.href =
-      "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.css";
+      "https://cdn.bootcss.com/github-markdown-css/2.10.0/github-markdown.min.css";
     document.head.appendChild(link);
     this.getAllArticle();
   },
