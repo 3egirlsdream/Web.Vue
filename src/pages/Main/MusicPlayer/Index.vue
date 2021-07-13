@@ -227,7 +227,7 @@ div::-webkit-scrollbar {
           </van-swipe>
           <div>
             <div
-              v-for="icon in icons"
+              v-for="(icon, index) in icons" :key="index"
               style="border-radius:50px;background:red;float:left; margin:5px; width:30px;height:30px;"
             >
               <van-icon
@@ -240,7 +240,7 @@ div::-webkit-scrollbar {
           </div>
         </div>
         <div style="clear:both;"></div>
-        <div v-for="item in boxes" class="back_1" @click="onclick">
+        <div v-for="(item, index) in boxes" :key="index" class="back_1" @click="onclick">
           <div style="margin:0 auto;line-height:100px;" class="demo2">
             <van-icon name="like" color="red">
               <br />
@@ -253,7 +253,7 @@ div::-webkit-scrollbar {
         <div class="page_construct_right" style="border-radius:25px;">
           <van-cell icon="audio" value="播放全部" clickable />
           <van-list v-model="loading" :finished="finished" @load="getall">
-            <van-row v-for="item in musics">
+            <van-row v-for="(item, index) in musics" :key="index">
               <van-col span="2" style="margin: 12px 0px 10px 10px;">
                 <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
               </van-col>
@@ -314,7 +314,6 @@ export default {
       ],
       finished:false,
       loading:false,
-      musics: [],
       src: "http://www.endingisnihility.xyz/mp3/许嵩 - 医生.mp3",
       musics: [],
       src: null,
@@ -350,7 +349,7 @@ export default {
       let self = this;
       setTimeout(()=>{
         var url = framework.strFormat(this.$options.serverUrl.API_GET_ALL, "N", 0, self.musics.length + 20);
-        var res = fsCfg.getData(url, function(res) {
+        fsCfg.getData(url, function(res) {
           if (res.success) {
             var data = res.data.data;
             // for (var i = 0; i < data.length; i++) {

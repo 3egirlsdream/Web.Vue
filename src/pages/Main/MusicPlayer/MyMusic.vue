@@ -195,7 +195,7 @@ div::-webkit-scrollbar {
         @click="$router.go(-1)"
       />
       <van-cell icon="audio" value="播放全部" clickable @click="playAll()" style="background:transparent;"/>
-      <van-row v-for="item in musics">
+      <van-row v-for="(item, index) in musics" :key="index">
         <van-col span="2" style="margin: 12px 0px 10px 10px;">
           <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
         </van-col>
@@ -293,13 +293,14 @@ export default {
         this.$options.serverUrl.API_GET_I_LIKE,
         "Y", 0, 0
       );
-      var res = fsCfg.getData(url, function(res) {
+      fsCfg.getData(url, function(res) {
         if (res.success) {
           var data = res.data;
           self.musics = data;
           self.active = 0;
           self.musics.forEach(element => {
             self.playlist.push("http://www.endingisnihility.xyz/mp3/" + element.name);
+            console.log("http://www.endingisnihility.xyz/mp3/" + element.name)
           });
           self.audio.playlist = self.playlist;
           self.src = self.prex + data[0].name;
