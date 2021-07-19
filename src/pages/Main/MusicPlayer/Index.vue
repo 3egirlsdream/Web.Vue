@@ -212,93 +212,27 @@ div::-webkit-scrollbar {
 
 <template>
   <div class="pages">
-    <van-tabs v-model="active" animated @click="tabClick">
-      <van-tab title="我的" style="background:white;">
-        <div style="margin:15px; border-radius:10px; height:15vh;">
-          <van-swipe
-            class="my-swipe"
-            :autoplay="3000"
-            indicator-color="white"
-            style="border-radius:10px;"
-          >
-            <van-swipe-item v-for="(image, index) in images" :key="index">
-              <img :src="image" width="100%" />
-            </van-swipe-item>
-          </van-swipe>
-          <div>
-            <div
-              v-for="(icon, index) in icons" :key="index"
-              style="border-radius:50px;background:red;float:left; margin:5px; width:30px;height:30px;"
-            >
-              <van-icon
-                :name="icon"
-                size="25"
-                @click="onclick"
-                style="text-align:center;margin:3px;"
-              />
-            </div>
-          </div>
-        </div>
-        <div style="clear:both;"></div>
-        <div v-for="(item, index) in boxes" :key="index" class="back_1" @click="onclick">
-          <div style="margin:0 auto;line-height:100px;" class="demo2">
-            <van-icon name="like" color="red">
-              <br />
-              <font color="black">{{item}}</font>
-            </van-icon>
-          </div>
-        </div>
-      </van-tab>
-      <van-tab title="全部">
-        <div class="page_construct_right" style="border-radius:25px;">
-          <van-cell icon="audio" value="播放全部" clickable />
-          <van-list v-model="loading" :finished="finished" @load="getall">
-            <van-row v-for="(item, index) in musics" :key="index">
-              <van-col span="2" style="margin: 12px 0px 10px 10px;">
-                <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
-              </van-col>
-              <van-col span="16">
-                <van-cell :key="item.name" :title="item.name" @click="onclickPlay(item.name)" />
-              </van-col>
-            </van-row>
-          </van-list>
-        </div>
-      </van-tab>
-      <van-tab title="搜索">
-        
-      </van-tab>
-    </van-tabs>
-    <v-bottom-navigation
-      style="background:#f1f3f4;"
-      scroll-target="#scroll-area-1"
-      hide-on-scroll
-      absolute
-      horizontal
-    >
-      <audio ref="audio" preload="auto" controls="controls" :src="src">
+    <van-nav-bar title="BB音乐" style="position: sticky;top:0" />
+    <mine></mine>
+    
+      <audio ref="audio" preload="auto" controls="controls" :src="src"  style="background:#f1f3f4;bottom: 0px;position: absolute;width: 100%;">
+        <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
+        <!-- <source :src="src" type="audio/mpeg" /> -->
+      </audio>
+
+
+
+    <v-bottom-navigation v-if="false" style="background:#f1f3f4;" scroll-target="#scroll-area-1" hide-on-scroll absolute horizontal>
+      <img class="size" src="../../../../assets/img/music.png" v-show="!show" />
+      <img class="size" src="../../../../assets/img/music1.png" v-show="show" />
+      <audio ref="audio" controls="controls" preload="auto" :src="src">
         <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
         <!-- <source :src="src" type="audio/mpeg" /> -->
       </audio>
     </v-bottom-navigation>
+   
 
-
-    
-  <!-- 搜索 -->
-  <van-popup v-model="searchShow" position="bottom" :style="{height:'100%', width:'100%'}" close-icon-position="top-left" closeable close-icon="arrow-left">
-    <div style="margin-left:5vh;margin-top:1vh;"> 
-      <van-cell-group>
-        <van-field v-model="searchText" label="" right-icon="search" laceholder="" @click="search"/>
-        <van-row v-for="(item, index) in musics_after_search" :key="index">
-          <van-col span="2" style="margin: 12px 0px 10px 10px;">
-            <van-icon name="like" :color="item.color" size="20" @click="ilikeClick(item.name)" />
-          </van-col>
-          <van-col span="16">
-            <van-cell :key="item.name" :title="item.name"/>
-          </van-col>
-      </van-row>
-      </van-cell-group>
-    </div>
-  </van-popup>
+  
 
   </div>
 
@@ -311,9 +245,9 @@ import fsCfg from "../../../assets/js/fw";
 export default {
   name: "Index",
   serverUrl: {
-    API_GET_ALL: "/api/music/GetMusics/like={0}&start={1}&length={2}",
+    API_GET_ALL: "/api/music/GetMusics?like={0}&start={1}&length={2}",
     API_ADD_I_LIKE: "/api/music/AddILike",
-    API_SEARCH:"/api/music/Search/value={0}"
+    API_SEARCH:"/api/music/Search?value={0}"
   },
   data() {
     return {
@@ -362,6 +296,9 @@ export default {
       prex :'http://www.endingisnihility.xyz/mp3/'
     };
   },
+  components:{
+    mine:()=> import('./components/mine.vue'),
+  },
   methods: {
     onclickPlay(item) {
       var self = this;
@@ -370,93 +307,35 @@ export default {
         self.$refs.audio.play();
       }, 1000);
     },
-    getall() {
-      let self = this;
-      setTimeout(()=>{
-        var url = framework.strFormat(this.$options.serverUrl.API_GET_ALL, "N", 0, self.musics.length + 20);
-        fsCfg.getData(url, function(res) {
-          if (res.success) {
-            var data = res.data.data;
-            // for (var i = 0; i < data.length; i++) {
-            //   //data[i] = data[i].replace("../mp3\\", "");
-            // }
-            // 加载状态结束
-            self.loading = false;
-            self.musics = data;
-            
-            if (self.musics.length >= res.data.total) {
-              self.finished = true;
-            }
-          } else {
-            Toast(res.message.content);
-          }
-        });
-      }, 1000);
+     playEndedHandler: function () {
+      try {
+        let self = this;
+        this.position++;
+        this.src = this.playlist[this.position % this.playlist.length];
+        this.audio.src = this.src;
+        setTimeout(() => {
+          self.audio.play();
+        }, 1000);
+      } catch {
+        this.position--;
+        setTimeout(() => {
+          self.playEndedHandler();
+        }, 1000);
+      }
     },
     onclick() {
-      this.$router.push({ path: "MyMusic" });
-    },
-    ilikeClick(name) {
-      let self = this;
-      var data = {
-        USER_CODE: "SYS",
-        MUSIC_NAME: name
-      };
-      fsCfg.postData(
-        this.$options.serverUrl.API_ADD_I_LIKE,
-        JSON.stringify(data),
-        function(res) {
-          if (res.success) {
-            for (let index = 0; index < self.musics.length; index++) {
-              const element = self.musics[index];
-              if (element.name == name) {
-                element.color = element.color == "red" ? "black" : "red";
-              }
-            }
-          }
-        }
-      );
+      this.$router.push({ path: "favours" });
     },
     tabClick(name, title){
       if(title == "搜索"){
         this.searchShow = true;
       }
     },
-    ilikeClick(name) {
-      let self = this;
-      var data = {
-        USER_CODE: "SYS",
-        MUSIC_NAME: name
-      };
-      fsCfg.postData(
-        this.$options.serverUrl.API_ADD_I_LIKE,
-        JSON.stringify(data),
-        function(res) {
-          if (res.success) {
-            for (let index = 0; index < self.musics_after_search.length; index++) {
-              const element = self.musics_after_search[index];
-              if (element.name == name) {
-                element.color = element.color == "red" ? "black" : "red";
-              }
-            }
-          }
-        }
-      );
-    },
-    search(){
-      if(this.searchText == '') return;
-      let self = this;
-      fsCfg.getData(framework.strFormat(this.$options.serverUrl.API_SEARCH, this.searchText), function(result)
-      {
-        if(result.success){
-          self.musics_after_search = result.data;
-        }
-      })
-    }
   },
   mounted: function() {
     this.active = 0;
-    this.getall();
+    this.audio = this.$refs.audio;
+    this.audio.addEventListener("ended", this.playEndedHandler, false);
   }
 };
 </script>

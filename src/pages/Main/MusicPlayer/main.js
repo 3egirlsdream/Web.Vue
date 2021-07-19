@@ -14,6 +14,11 @@ Vue.prototype.$qs = querystring;
 
 //import Vuetify from 'vuetify'
 //import 'vuetify/dist/vuetify.min.css'
+
+import fsCfg from "../../../assets/js/fw";
+Vue.prototype.$fsCfg = fsCfg
+import { Toast } from "vant";
+Vue.prototype.$toast = Toast;
 import _ from 'lodash'
 Vue.prototype._ = _
 //Vue.use(Vuetify);

@@ -58,7 +58,7 @@ div::-webkit-scrollbar {
 .textdiv {
   float: right;
   margin-right: 5vh;
-  font-family: "Helvetica Neue",Helvetica,Arial,"Microsoft Yahei",sans-serif;
+  font-family: "Helvetica Neue", Helvetica, Arial, "Microsoft Yahei", sans-serif;
   //overflow-x: hidden;
   cursor: pointer;
   transition: all 0.2s linear;
@@ -179,21 +179,10 @@ div::-webkit-scrollbar {
   <div class="pages">
     <div class="page_construct">
       <div class="page_construct_left">
-        <div
-          v-for="item in navigation"
-          class="left_title_style"
-          :style="{ height: item.height, background: item.clickbackground }"
-          @click="selected(item)"
-        >
-          <div
-            :style="{ background: item.background, height: item.height }"
-            class="focus_div"
-          ></div>
-          <div
-            class="textdiv"
-            :style="{ 'line-height': item.height, 'font-size': item.fontsize }"
-          >
-            <img style="margin-right:20px; margin-bottom:5px;" :src="item.src" height="auto" width="auto"/>{{ item.title }}
+        <div v-for="(item, index) in navigation" :key="index" class="left_title_style" :style="{ height: item.height, background: item.clickbackground }" @click="selected(item)">
+          <div :style="{ background: item.background, height: item.height }" class="focus_div"></div>
+          <div class="textdiv" :style="{ 'line-height': item.height, 'font-size': item.fontsize }">
+            <img style="margin-right:20px; margin-bottom:5px;" :src="item.src" height="auto" width="auto" />{{ item.title }}
           </div>
         </div>
         <div class="powered_by_style">Powered by .NetCore & Vue</div>
@@ -217,32 +206,20 @@ div::-webkit-scrollbar {
 
         <!-- 文章列表 -->
         <div v-show="writes" style="height:100vh;">
-          <div  
-            class="tabs-bar container"
-            style="position: fixed;padding-left:2em;top: 0px;box-shadow:2px 2px 5px gray;z-index:999;"
-          >
+          <div class="tabs-bar container" style="position: fixed;padding-left:2em;top: 0px;box-shadow:2px 2px 5px gray;z-index:999;">
             <nav class="tags-list">
-              <a
-                v-for="category in categories"
-                @click="focused(category)"
-                v-bind:class="{ active: category.checked }"
-                style="-webkit-order: -1; order: -1;margin-top:5.5em"
-                class="tags-list-item waves-effect waves-button waves-light "
-                >{{ category.name }}</a>
+              <a v-for="category in categories" @click="focused(category)" v-bind:class="{ active: category.checked }" style="-webkit-order: -1; order: -1;margin-top:5.5em"
+                class="tags-list-item waves-effect waves-button waves-light ">{{ category.name }}</a>
             </nav>
           </div>
-          <div
-            style="height:80vh; position: relative; margin-top:2em"
-          >
+          <div style="height:80vh; position: relative; margin-top:2em">
             <div class="waterfall-item" style="clear:both; width:100%;">
               <article class="article-card archive-article" v-for="item in articles" style="margin:10px;float:left;">
                 <div class="post-meta">
                   <time>{{item.DATETIME_CREATED}}</time>
                 </div>
                 <h3 class="post-title" itemprop="name">
-                  <a class="post-title-link" @click="toDetail(item)"
-                    >{{item.ARTICLE_NAME}}</a
-                  >
+                  <a class="post-title-link" @click="toDetail(item)">{{item.ARTICLE_NAME}}</a>
                 </h3>
               </article>
             </div>
@@ -268,18 +245,12 @@ div::-webkit-scrollbar {
 
             <div class="category_border_style">
               <li class="article-tag-list-item" v-for="ac in detail.categories">
-                <a
-                  class="article-tag-list-link waves-effect waves-button"
-                  rel="tag"
-                  >{{ ac }}</a>
+                <a class="article-tag-list-link waves-effect waves-button" rel="tag">{{ ac }}</a>
               </li>
               <br style="clear:both;" />
             </div>
           </div>
-          <div
-            class="detail_article_content markdown-body"
-            v-html="detail.CONTENT_TRANSFERED"
-          ></div>
+          <div class="detail_article_content markdown-body" v-html="detail.CONTENT_TRANSFERED"></div>
         </div>
       </div>
     </div>
@@ -296,7 +267,8 @@ export default {
   serverUrl: {
     API_GET_ALL_ARTICLE: "/api/article/user={0}&category={1}",
     API_GET_CONTENT: "/api/article/id={0}",
-    API_GET_ALL_ARTICLE_TO_PAGE: "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
+    API_GET_ALL_ARTICLE_TO_PAGE:
+      "/api/article/page/user={0}&category={1}&startIndex={2}&length={3}",
   },
   data() {
     return {
@@ -310,7 +282,7 @@ export default {
           background: "#fff",
           height: "15vh",
           fontsize: "16px",
-          src:""
+          src: "",
         },
         {
           title: "主页",
@@ -319,7 +291,7 @@ export default {
           background: "#fff",
           height: "5vh",
           fontsize: "16px",
-          src:"https://gitee.com/eeegirlsdream/picture/raw/master/aticle/20210112094844.png"
+          src: "https://gitee.com/eeegirlsdream/picture/raw/master/aticle/20210112094844.png",
         },
         {
           title: "分类",
@@ -328,7 +300,7 @@ export default {
           background: "#fff",
           height: "5vh",
           fontsize: "16px",
-          src:"https://gitee.com/eeegirlsdream/picture/raw/master/aticle/20210112095145.png"
+          src: "https://gitee.com/eeegirlsdream/picture/raw/master/aticle/20210112095145.png",
         },
         {
           title: "About",
@@ -337,7 +309,7 @@ export default {
           background: "#fff",
           height: "5vh",
           fontsize: "16px",
-          src:""
+          src: "",
         },
         {
           title: "Photograph",
@@ -346,26 +318,26 @@ export default {
           background: "#fff",
           height: "5vh",
           fontsize: "16px",
-          src:""
+          src: "",
         },
       ],
       items: [], //文章列表
       index: true, //控制主页的显影
       writes: false, //控制文章页的显影
       dtl: false, //控制详细文章的显影
-      page:10,
-      articles:[]
+      page: 10,
+      articles: [],
     };
   },
   methods: {
-    focused: function(event) {
+    focused: function (event) {
       this.categories.forEach((element) => {
         element.checked = false;
       });
       event.checked = true;
       this.getArticleToPage();
     },
-    selected: function(item) {
+    selected: function (item) {
       for (let i = 0; i < this.navigation.length; i++) {
         this.navigation[i].background = "#fff";
         this.navigation[i].clickbackground = null;
@@ -376,7 +348,7 @@ export default {
       this.writes = false;
       this.dtl = false;
       if (item.title == "主页") this.index = true;
-      else if (item.title == "分类"){ 
+      else if (item.title == "分类") {
         this.writes = true;
         this.getArticleToPage();
       }
@@ -392,42 +364,48 @@ export default {
         this.$options.serverUrl.API_GET_CONTENT,
         item.ID
       );
-      fsCfg.getData(url, function(res) {
+      fsCfg.getData(url, function (res) {
         if (res.success) {
           self.detail = res.data;
-          
-            self.detail.DATETIME_CREATED = self.detail.DATETIME_CREATED.replace("T", " ");
-            self.detail.CONTENT_TRANSFERED = marked(self.detail.CONTENT);
-            self.detail.categories = self.detail.ARTICLE_CATEGORY.split(';');
+
+          self.detail.DATETIME_CREATED = self.detail.DATETIME_CREATED.replace(
+            "T",
+            " "
+          );
+          self.detail.CONTENT_TRANSFERED = marked(self.detail.CONTENT);
+          self.detail.categories = self.detail.ARTICLE_CATEGORY.split(";");
         }
-      })
+      });
     },
     getAllArticle() {
       let self = this;
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_ALL_ARTICLE,
-        "cxk", "全部"
+        "cxk",
+        "全部"
       );
-      fsCfg.getData(url, function(res) {
+      fsCfg.getData(url, function (res) {
         if (res.success) {
           self.items = res.data;
           self.categories = [{ name: "全部", checked: true }];
           let temp = [];
           for (let index = 0; index < res.data.length; index++) {
             const element = res.data[index];
-            
-              var ca = element.ARTICLE_CATEGORY.split(';');
-              ca.forEach(x=>{
-                if(!temp.includes(x)) temp.push(x);
-              });
+
+            var ca = element.ARTICLE_CATEGORY.split(";");
+            ca.forEach((x) => {
+              if (!temp.includes(x)) temp.push(x);
+            });
           }
-          temp.forEach(c=>{
+          temp.forEach((c) => {
             var m = { name: c, checked: false };
             self.categories.push(m);
-          })
+          });
 
           for (let i = 0; i < self.items.length; i++) {
-            self.items[i].DATETIME_CREATED = self.items[i].DATETIME_CREATED.replace("T", " ");
+            self.items[i].DATETIME_CREATED = self.items[
+              i
+            ].DATETIME_CREATED.replace("T", " ");
             self.items[i].INDEX_CONTENT = self.items[i].CONTENT.replace(
               /<[^>].*?>/g,
               ""
@@ -443,29 +421,35 @@ export default {
       var category = "";
       for (let index = 0; index < self.categories.length; index++) {
         const element = self.categories[index];
-        if(element.checked){
+        if (element.checked) {
           category = element.name;
           break;
         }
       }
       var url = framework.strFormat(
         this.$options.serverUrl.API_GET_ALL_ARTICLE_TO_PAGE,
-        "cxk", encodeURIComponent(category), 0, 9999
+        "cxk",
+        encodeURIComponent(category),
+        0,
+        9999
       );
-      fsCfg.getData(url, function(res) {
+      fsCfg.getData(url, function (res) {
         if (res.success) {
           self.articles = res.data;
           for (let i = 0; i < self.items.length; i++) {
             if (self.articles[i].IMG_CODE != null)
-            self.articles[i].DATETIME_CREATED = self.articles[i].DATETIME_CREATED.replace("T", " ");
-            self.articles[i].CONTENT_TRANSFERED = marked(self.articles[i].CONTENT);
+              self.articles[i].DATETIME_CREATED = self.articles[
+                i
+              ].DATETIME_CREATED.replace("T", " ");
+            self.articles[i].CONTENT_TRANSFERED = marked(
+              self.articles[i].CONTENT
+            );
           }
         }
       });
     },
-
   },
-  mounted: function() {
+  mounted: function () {
     const link = document.createElement("link");
     link.type = "text/css";
     link.rel = "stylesheet";

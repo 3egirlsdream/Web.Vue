@@ -17,14 +17,16 @@ const routes = [{
     title: ''
   },
   component: resolve => require(['./About'], resolve)
-},{
-  name: 'MyMusic',
-  path: '/MyMusic',
-  meta: {
-    title: ''
-  },
-  component: resolve => require(['./MyMusic'], resolve)
-}];
+  }
+  // , {
+  // name: 'favours',
+  // path: '/favours',
+  // meta: {
+  //   title: ''
+  // },
+  // component: resolve => require(['./favours'], resolve)
+  // }
+];
 
 const router = new Router({
   routes
