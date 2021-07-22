@@ -4,6 +4,7 @@ import App from './App.vue'
 import {
   router
 } from './router'
+import { Toast } from "vant";
 
 import '../../../assets/js/base';
 import 'vant/lib/index.less';
@@ -12,8 +13,9 @@ Vue.prototype.$qs = querystring;
 
 import fsCfg from '../../../assets/js/fw'
 import _ from 'lodash'
-Vue.prototype._ = _
-Vue.use(fsCfg);
+// Vue.prototype._ = _
+Vue.prototype.$fsCfg = fsCfg;
+Vue.prototype.$toast = Toast;
 Vue.use(Vant);
 
 new Vue({

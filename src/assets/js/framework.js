@@ -101,7 +101,8 @@
 
   //
   exports.isNullOrWhite = function(str){
-    if(str == null) return false;
+    if (str == null) return false;
+    if (str == undefined) return false;
     if(str == "") return false;
     return true;
   }

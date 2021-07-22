@@ -50,7 +50,7 @@ export default {
       console.log(item);
     },
     onClick(item) {
-      console.log(item);
+      this.$emit('play', item);
     },
     
     playAll() {
@@ -61,18 +61,18 @@ export default {
         this.$options.serverUrl.API_GET_I_LIKE,
         "Y",
         0,
-        0
+        10000
       );
       self.$fsCfg.getData(url, function (res) {
         if (res.success) {
-          var data = res.data;
+          var data = res.data.data;
           self.musics = data;
           self.active = 0;
           self.musics.forEach((element) => {
             self.playlist.push(
-              "http://www.endingisnihility.xyz/mp3/" + element.name
+              "http://qwmwy74s4.hn-bkt.clouddn.com/" + element.MUSIC_NAME
             );
-            console.log("http://www.endingisnihility.xyz/mp3/" + element.name);
+            console.log("http://qwmwy74s4.hn-bkt.clouddn.com/" + element.MUSIC_NAME);
           });
         } else {
           Toast(res.message.content);

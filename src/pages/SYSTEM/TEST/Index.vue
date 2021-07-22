@@ -1,63 +1,12 @@
-<style lang="less" scoped>
-.content {
-  box-sizing: content-box !important;
-  padding-bottom: 50px;
-  background: #fafafa;
-  .footer {
-    width: 100%;
-    position: fixed;
-    bottom: 0;
-    z-index: 2;
-  }
-}
-
-.Gray {
-  background-color: white;
-  height: 10px;
-}
-.pages {
-  background-color: gray;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-.p {
-  font-size: 17px;
-}
-.menu {
-  a {
-    color: black;
-    padding: 5px;
-    font-size: 9px;
-  }
-
-  a:hover {
-    color: white;
-  }
-}
-.title {
-  a {
-    color: black;
-    padding: 5px;
-    font-size: 2vh;
-  }
-
-  a:hover {
-    color: white;
-  }
-}
-.container {
-  height: 15%;
-  width: 100%;
-}
-</style>
 
 <template>
-  <v-app>
-    <input type="file" class="upload" multiple />
-    <img class="previewImg" src="" />
-    <button @click="upload">submit</button>
-  </v-app>
+<div>
+  <input type="file" id="form" multiple @change="uploadIMG" accept="audio/mpeg" />
+  <div v-for="(item, index) in filelist" :key="index">
+    <span> {{item.MUSIC_NAME}}  {{item.ARTISTS}} {{item.CDN}}</span>
+  </div>
+  <button @click="postServer()">上传</button>
+</div>
 </template>
 
 <script>
@@ -71,6 +20,7 @@ export default {
     API_IS_LOGIN: "/api/values/login/user={0}&pwd={1}",
     API_WRITE_ARTICLE: "/api/article/write",
     API_GET_IMAGE: "/api/values/getimage={0}",
+    API_GET_TOKEN: "/api/Qiniu/GetToken",
   },
   data() {
     return {
@@ -80,76 +30,86 @@ export default {
       date: null,
       user: null,
       items: [],
+      token: "",
+      filelist: [],
     };
   },
   methods: {
-    uploadsingle(files, index, data){
-        let self = this;
-        var fr = new FileReader();
-        fr.readAsDataURL(files[index]); //读取文件内容，读取完成,result属性中将包含一个data: URL格式的字符串以表示所读取文件的内容。
-        fr.onload = function(e) {
-              var m = {
-                name: files[index].name,
-                stream: fr.result,
-              };
-              data.push(m);
-              if(index < files.length - 1){
-                index = index+1;
-                console.log(index);
-                self.uploadsingle(files, index, data);
-              }
-              else{
-                console.log(data);
-                       fsCfg.postData("/api/Values/Upload", JSON.stringify(data), function(
-                        res
-                      ) {
-                        if (!res.success) {
-                          console.log(res.message.content);
-                        }
-                      });
-              }
+    getToken() {
+      let self = this;
+      this.$fsCfg.getData(
+        this.$options.serverUrl.API_GET_TOKEN,
+        function (res) {
+          self.token = res.data;
+          console.log(res);
         }
+      );
     },
-    upload() {
-      
-      var data = [];
-      var files = document.querySelector("input.upload").files;
-      var index = 0;
-      this.uploadsingle(files, 0, data); 
+    uploadIMG(e) {
+      let files = e.target.files || e.dataTransfer.files;
+      if (!files.length) return;
+      for (let i = 0; i < files.length; i++) {
+        this.upload(files[i]);
+      }
     },
+    //获取图片
+    imgPreview(file, callback) {
+      let self = this;
+      //判断支不支持FileReader
+      if (!file || !window.FileReader) return;
+      let reader = new FileReader();
+
+      //将图片转成base64格式
+      reader.readAsDataURL(file);
+      //读取成功后的回调
+      reader.onloadend = function () {
+        let base64 = this.result;
+        console.log(base64);
+      };
+    },
+
+    upload(file) {
+      let self = this;
+      var formData = new FormData();
+      formData.append("file", file);
+      formData.append("token", this.token);
+      Axios({
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+        method: "post",
+        url: "http://up-z2.qiniup.com",
+        data: formData,
+      }).then(function (response) {
+        if (response != null && response.data != null) {
+          let music = file.name.split("-");
+          let _ = {
+            MUSIC_NAME: music[1].split(".")[0],
+            ARTISTS: music[0],
+            CDN: response.data.key,
+            QUALITY: "SQ",
+          };
+          self.filelist.push(_);
+        }
+      });
+    },
+
+    postServer(){
+      let self = this;
+      console.log(this.filelist);
+      this.$fsCfg.postData("/api/qiniu/uploadmusic", JSON.stringify(this.filelist), function(res){
+        if(res.success){
+
+        }
+        else{
+          self.$toast(res.message.content);
+        }
+      })
+    }
   },
-  mounted: function() {
+  mounted: function () {
     let self = this;
-    // var user = framework.getStorage("user");
-    // var pwd = framework.getStorage("pwd");
-    // let e = this.$options.serverUrl.API_IS_LOGIN;
-    // var url = framework.strFormat(
-    //   this.$options.serverUrl.API_IS_LOGIN,
-    //   user,
-    //   pwd
-    // );
-    // fsCfg.getData(url, function(res) {
-    //   if (!res.success) {
-    //     Toast("请登录");
-    //     const index = location.href.lastIndexOf("/INDEX");
-    //     const urlBase = location.href.substring(0, index);
-    //     window.location.href = urlBase + "/SYSTEM/Login.html";
-    //   }
-    // });
-    //Toast(user);
-
-    // var url = framework.strFormat(this.$options.serverUrl.API_GET_IMAGE, 'jxj');
-    // fsCfg.getData(url, function(res) {
-    //   if (res.success) {
-    //     self.items = res.data;
-    //     self.items.forEach(element => {
-    //       element.imG_CODE = "http://47.107.186.141/img/" + element.imG_CODE;
-    //     });
-    //   }
-    // });
-
-    // var myDate = new Date();
-    // this.date = myDate.toLocaleString();
+    this.getToken();
   },
 };
 </script>

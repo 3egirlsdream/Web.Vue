@@ -1,12 +1,12 @@
 <template>
-  <div style="width:100%;padding:5px;">
+  <div style="padding:5px;">
     <van-image :src="musicimg" height="3rem" width="3rem" style="text-align:center;" class="margin50">
-      <font size="2">{{item.name.split('-')[0]}}</font>
+      <font size="2">{{atom.ARTISTS}}</font>
     </van-image>
     <van-divider />
-    <div style="width:100%">
-      <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="like" :color="item.color" size="20" />
-      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">{{item.color == 'red' ? '取消收藏' : '收藏'}}</div>
+    <div style="width:100%" @click="ilikeClick(atom.MUSIC_NAME)">
+      <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="like" :color="atom.COLOR" size="20" />
+      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;" >{{atom.COLOR == 'red' ? '取消收藏' : '收藏'}}</div>
     </div>
     <div style="width:100%;clear:both">
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="add-o" size="20" />
@@ -40,9 +40,15 @@ export default {
   data() {
     return {
       musics: [],
+      atom:{},
       musicimg: "",
       displayname: framework.getStorage("displayname"),
     };
+  },
+  watch:{
+    atom(val){
+      console.log(val);
+    }
   },
   methods: {
     onClick() {
@@ -53,8 +59,10 @@ export default {
     },
     ilikeClick(name) {
       let self = this;
+      let displayname = framework.getStorage("displayname");
+      let usercode = framework.isNullOrWhite(displayname) ? 'SYS' : displayname;
       var data = {
-        USER_CODE: "SYS",
+        USER_CODE:  usercode,
         MUSIC_NAME: name,
       };
       self.$fsCfg.postData(
@@ -62,12 +70,10 @@ export default {
         JSON.stringify(data),
         function (res) {
           if (res.success) {
-            for (let index = 0; index < self.musics.length; index++) {
-              const element = self.musics[index];
-              if (element.name == name) {
-                element.color = element.color == "red" ? "black" : "red";
-              }
-            }
+            self.atom.COLOR = self.atom.COLOR == "red" ? "black" : "red";
+          }
+          else{
+            self.$toast(res.message.content);
           }
         }
       );
@@ -75,6 +81,9 @@ export default {
   },
   mounted() {
     this.musicimg = framework.getStorage("myimg");
+    this.atom = this.item;
+    this.atom.ARTISTS = this.atom.ARTISTS
+    console.log(this.atom);
   },
 };
 </script>

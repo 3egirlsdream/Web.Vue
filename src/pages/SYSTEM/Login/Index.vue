@@ -119,7 +119,7 @@ export default {
             window.location.href = urlBase + "/SYSTEM/Signup.html#/?isedit=Y";
           }
           else {
-            window.location.href = urlBase + "/Chat/Index.html#/ChatList"
+            self.$router.go(-1);
           }
         }
         else{

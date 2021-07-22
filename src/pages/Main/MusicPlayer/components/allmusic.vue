@@ -60,7 +60,8 @@ export default {
         });
       }, 1000);
     },
-    onClick() {
+    onClick(item) {
+      this.$emit('play', item);
     },
   },
   mounted() {
