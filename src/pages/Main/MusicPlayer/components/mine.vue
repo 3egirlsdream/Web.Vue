@@ -12,20 +12,24 @@
 
     <van-cell-group :border="false">
       <van-field readonly label="我喜欢" left-icon="like" :border="false" is-link @click="showFavours = true" />
-      <van-field readonly label="全部" left-icon="music" :border="false" is-link @click="showAll = true" />
+      <van-field readonly label="音乐库" left-icon="music" :border="false" is-link @click="showAll = true" />
+     
     </van-cell-group>
     <van-popup v-model="showAll" position="bottom" :style="{height:'100%', width:'100%'}">
       <allmusic v-if="showAll" @close="showAll = false" @play="play"></allmusic>
     </van-popup>
 
     <!-- 搜索 -->
-    <van-popup v-model="showSearch" position="bottom" :style="{height:'100%', width:'100%'}" close-icon-position="top-left" closeable close-icon="arrow-left">
-      <search></search>
+    <van-popup v-model="showSearch" position="bottom" :style="{height:'100%', width:'100%'}">
+      <search @play="play" @close="showSearch = false"></search>
     </van-popup>
 
     <van-popup v-model="showFavours" position="bottom" :style="{height:'100%', width:'100%'}">
       <favours v-if="showFavours" @close="showFavours = false" @play="play"></favours>
     </van-popup>
+
+  
+    
   </div>
 </template>
 

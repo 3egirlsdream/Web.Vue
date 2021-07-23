@@ -59,10 +59,9 @@ export default {
     },
     ilikeClick(name) {
       let self = this;
-      let displayname = framework.getStorage("displayname");
-      let usercode = framework.isNullOrWhite(displayname) ? 'SYS' : displayname;
+      let user = framework.getStorage("user");
       var data = {
-        USER_CODE:  usercode,
+        USER_CODE:  user,
         MUSIC_NAME: name,
       };
       self.$fsCfg.postData(

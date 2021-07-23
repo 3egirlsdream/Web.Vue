@@ -10,29 +10,27 @@
   <div class="pages">
     <van-nav-bar title="BB音乐" style="position: sticky;top:0" />
     <mine @play="onclickPlay"></mine>
-
-    <audio ref="audio" preload="auto" controls="controls" :src="src" style="background:#f1f3f4;bottom: 0px;position: absolute;width: 100%;z-index:9999">
-
+    
+    <div  style="background:#f1f3f4;bottom: 0px;position: absolute;width: 100%;z-index:9999;height:48px" v-show="!showLyric">
+    <div @click="showLyric = true" style="float:left;">
+      <img class="size" src="../../../assets/img/music.png" v-show="!show" />
+      <img class="size" src="../../../assets/img/music1.png" v-show="show" />
+    </div>
+     <audio  ref="audio" preload="auto" controls="controls" :src="src" class="width100-48" style="float:left;height:48px">
       <source :src="src" type="audio/mpeg" />
     </audio>
-
-    <v-bottom-navigation v-if="false" style="background:#f1f3f4;" scroll-target="#scroll-area-1" hide-on-scroll absolute horizontal>
-      <img class="size" src="../../../../assets/img/music.png" v-show="!show" />
-      <img class="size" src="../../../../assets/img/music1.png" v-show="show" />
-      <audio ref="audio" controls="controls" preload="auto" :src="src">
-        <!-- <source src="../../../mp3/我乐意.mp3" type="audio/mpeg" /> -->
-        <!-- <source :src="src" type="audio/mpeg" /> -->
-      </audio>
-    </v-bottom-navigation>
-
+    </div>
+   
+    <van-popup v-model="showLyric" position="bottom" :style="{height:'100%', width:'100%'}">
+      <lyric v-if="showLyric" @close="showLyric = false" :audio="$refs.audio" :item="item"></lyric>
+    </van-popup>
   </div>
 
 </template>
 
 
 <script>
-import { Toast } from "vant";
-import fsCfg from "../../../assets/js/fw";
+
 export default {
   name: "Index",
   serverUrl: {
@@ -42,23 +40,13 @@ export default {
   },
   data() {
     return {
-      boxes: ["我喜欢的音乐", "FM", "···"],
-      icons: ["play", "audio", "graphic", "column", "invition"],
+      showLyric: false,
+      show: false,
       images: [
         "https://cdn.wallpaperhub.app/cloudcache/d/0/c/a/6/7/d0ca67fb67d065130241cde719fbef2908393ffd.png",
         "https://cdn.wallpaperhub.app/cloudcache/4/4/1/9/d/9/4419d949c0724e36f4ac108715ebfb507ac0740e.jpg",
       ],
-      Singers: [
-        "All",
-        "许嵩",
-        "米津玄师",
-        "王菲",
-        "周杰伦",
-        "李健",
-        "薛之谦",
-        "双笙",
-        "买辣椒也用券",
-      ],
+      Singers: [],
       musics_after_search: [],
       searchText: "",
       searchShow: false,
@@ -72,27 +60,21 @@ export default {
         active: "https://img.yzcdn.cn/vant/user-active.png",
         inactive: "https://img.yzcdn.cn/vant/user-inactive.png",
       },
-      items: [
-        {
-          color: "#952175",
-          src: "https://cdn.vuetifyjs.com/images/cards/halcyon.png",
-          title: "Halcyon Days",
-          artist: "Ellie Goulding",
-        },
-      ],
-      index: true, //控制主页的显影
-      writes: false, //控制文章页的显影
-      dtl: false, //控制详细文章的显影
-      prex: "http://www.endingisnihility.xyz/mp3/",
+      items: [],
+      item:{},
       audio: null,
+      playlist: [],
+      playstatus:0,//0 单曲循环 1 顺序播放 2 列表循环
     };
   },
   components: {
     mine: () => import("./components/mine.vue"),
+    lyric: () => import("./components/lyricCard.vue"),
   },
   methods: {
     onclickPlay(item) {
       var self = this;
+      this.item = item;
       this.src = "http://cdn.endingisnihility.xyz/" + item.CDN;
       console.log(this.src);
       setTimeout(function () {
@@ -103,11 +85,13 @@ export default {
       try {
         let self = this;
         this.position++;
-        this.src = this.playlist[this.position % this.playlist.length];
-        this.audio.src = this.src;
-        setTimeout(() => {
-          self.audio.play();
-        }, 1000);
+        if (this.playlist.length > 0) {
+          this.src = this.playlist[this.position % this.playlist.length];
+          this.audio.src = this.src;
+          setTimeout(() => {
+            self.audio.play();
+          }, 1000);
+        }
       } catch {
         this.position--;
         setTimeout(() => {
@@ -128,6 +112,16 @@ export default {
     this.active = 0;
     this.audio = this.$refs.audio;
     this.audio.addEventListener("ended", this.playEndedHandler, false);
+    
+    setInterval(() => {
+      this.show = !this.show;
+    }, 1000);
   },
 };
 </script>
+
+<style scoped>
+.width100-48{
+  width:calc(100%-48px);
+}
+</style>

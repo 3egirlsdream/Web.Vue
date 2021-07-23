@@ -29,7 +29,7 @@ import { Toast } from "vant";
 export default {
   name: "Index",
   serverUrl: {
-    API_GET_I_LIKE: "/api/music/GetMusics?like={0}&start={1}&length={2}",
+    API_GET_I_LIKE: "/api/music/GetMusics?like={0}&start={1}&length={2}&user={3}",
     API_ADD_I_LIKE: "/api/music/AddILike",
   },
   components: {
@@ -61,7 +61,8 @@ export default {
         this.$options.serverUrl.API_GET_I_LIKE,
         "Y",
         0,
-        10000
+        10000,
+        framework.getStorage("user")
       );
       self.$fsCfg.getData(url, function (res) {
         if (res.success) {
@@ -70,9 +71,8 @@ export default {
           self.active = 0;
           self.musics.forEach((element) => {
             self.playlist.push(
-              "http://qwmwy74s4.hn-bkt.clouddn.com/" + element.MUSIC_NAME
+              "http://cdn.endingisnihility.xyz/" + element.MUSIC_NAME
             );
-            console.log("http://qwmwy74s4.hn-bkt.clouddn.com/" + element.MUSIC_NAME);
           });
         } else {
           Toast(res.message.content);
@@ -86,9 +86,6 @@ export default {
   mounted: function () {
     this.getILike();
     
-    setInterval(() => {
-      this.show = !this.show;
-    }, 1000);
   },
 };
 </script>
