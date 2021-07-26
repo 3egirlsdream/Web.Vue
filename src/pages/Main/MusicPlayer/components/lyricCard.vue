@@ -140,13 +140,9 @@ export default {
     };
   },
   watch:{
-    status(val){
-      console.log(val)
-    }
   },
   methods: {
     showPlaylist(){
-      console.log(1);
     },
     changeStatus(){
       this.status.playStatus = this.status.playStatus == 'loop' ? 'single' : 'loop'

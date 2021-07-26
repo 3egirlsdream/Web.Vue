@@ -10,14 +10,15 @@ const routes = [{
     title: ''
   },
   component: resolve => require(['./Index'], resolve)
-},{
-  name: 'About',
-  path: '/About',
-  meta: {
-    title: ''
-  },
-  component: resolve => require(['./About'], resolve)
-  }
+}
+  // , {
+  // name: 'About',
+  // path: '/About',
+  // meta: {
+  //   title: ''
+  // },
+  // component: resolve => require(['./About'], resolve)
+  // }
   // , {
   // name: 'favours',
   // path: '/favours',

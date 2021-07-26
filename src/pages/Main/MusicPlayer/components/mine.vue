@@ -11,8 +11,9 @@
     </div>
 
     <van-cell-group :border="false">
-      <van-field readonly label="我喜欢" left-icon="like" :border="false" is-link @click="showFavours = true" />
-      <van-field readonly label="音乐库" left-icon="music" :border="false" is-link @click="showAll = true" />
+      <van-field readonly label="我喜欢" left-icon="like-o" :border="false" is-link @click="showFavours = true" />
+      <van-field readonly label="音乐库" left-icon="music-o" :border="false" is-link @click="showAll = true" />
+       <van-field readonly label="排行榜" left-icon="bar-chart-o" :border="false" is-link @click="showRank = true" />
      
     </van-cell-group>
     <van-popup v-model="showAll" position="bottom" :style="{height:'100%', width:'100%'}">
@@ -28,6 +29,10 @@
       <favours v-if="showFavours" @close="showFavours = false" @play="play" @addmusic="addMusic"></favours>
     </van-popup>
 
+     <van-popup v-model="showRank" position="bottom" :style="{height:'100%', width:'100%'}">
+      <rank v-if="showRank" @close="showRank = false" @play="play" @addmusic="addMusic"></rank>
+    </van-popup>
+
   
     
   </div>
@@ -41,19 +46,15 @@ export default {
     allmusic: () => import("./allmusic.vue"),
     search: () => import("./search.vue"),
     favours: () => import("./favours.vue"),
+    rank: () => import("./rankCard.vue"),
   },
   data() {
     return {
+      showRank:false,
       showFavours: false,
       showSearch: false,
       showAll: false,
       searchText: "",
-      boxes: ["我喜欢的音乐", "FM", "···"],
-      icons: ["play", "audio", "graphic", "column", "invition"],
-      images: [
-        "https://cdn.wallpaperhub.app/cloudcache/d/0/c/a/6/7/d0ca67fb67d065130241cde719fbef2908393ffd.png",
-        "https://cdn.wallpaperhub.app/cloudcache/4/4/1/9/d/9/4419d949c0724e36f4ac108715ebfb507ac0740e.jpg",
-      ],
       displayname: framework.getStorage("displayname"),
       userimg: "",
     };

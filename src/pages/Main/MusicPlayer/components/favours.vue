@@ -42,7 +42,6 @@ export default {
       audio: null,
       playlist: [],
       show: true,
-      prex: "http://www.endingisnihility.xyz/mp3/",
     };
   },
   methods: {
