@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-nav-bar title="搜索" style="position: sticky;top:0" left-arrow @click-left="$emit('close')"/>
+    <van-nav-bar title="搜索" style="position: sticky;top:0" left-arrow @click-left="$emit('close')" />
     <van-search autofocus v-model="searchText" placeholder="搜索" @search="onSearch" />
     <musicatom v-for="(item, index) in musics_after_search" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)" @ellipsis="ellipsis(item)"></musicatom>
   </div>
@@ -29,25 +29,25 @@ export default {
   },
   methods: {
     onClick(item) {
-      this.$emit('play', item);
+      this.$emit("play", item);
     },
     ellipsis() {
       this.$emit("ellipsis");
     },
     onSearch() {
       let self = this;
-      self.$fsCfg.getData(
-        framework.strFormat(
-          this.$options.serverUrl.API_SEARCH,
-          this.searchText,
-          framework.getStorage('user')
-        ),
-        function (result) {
-          if (result.success) {
-            self.musics_after_search = result.data;
-          }
-        }
+      let url = framework.strFormat(
+        this.$options.serverUrl.API_SEARCH,
+        this.searchText,
+        framework.getStorage("user")
       );
+      self.$fsCfg.get(url).then((result) => {
+        if (result.success) {
+          self.musics_after_search = result.data;
+        } else{
+          self.$toast(result.message.content);
+        }
+      });
     },
   },
   mounted() {},

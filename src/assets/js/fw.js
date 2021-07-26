@@ -5,32 +5,32 @@ const fsCfg = {
     serverAddr: function () {
         if (window.location.hostname === 'localhost1')
             return 'https://localhost:44389'
-         else if (window.location.protocol === 'http:') {
+        else if (window.location.protocol === 'http:') {
             return 'http://47.107.186.141:4396'
-         }
+        }
         return ''
     },
     getDataWithoutCheck: function (url, callback) {
         console.log('GET URL:' + url)
         Axios.get(url)
-          .then(function (response) {
-            if (response != null) {
-                setTimeout(
-                    function (clbk, msg) {
-                        clbk(msg)
-                    },
-                    100,
-                    callback,
-                    response.data
-                )
-            }
-        })
-          // 请求失败
-          .catch(error => {
-            console.log(error);
-            console.log("网络错误")
-          });
-      },
+            .then(function (response) {
+                if (response != null) {
+                    setTimeout(
+                        function (clbk, msg) {
+                            clbk(msg)
+                        },
+                        100,
+                        callback,
+                        response.data
+                    )
+                }
+            })
+            // 请求失败
+            .catch(error => {
+                console.log(error);
+                console.log("网络错误")
+            });
+    },
     getData: function (url, callback) {
         console.log('GET URL:' + this.serverAddr() + url)
         let user = 'cxk'//framework.getStorage('user');
@@ -67,6 +67,24 @@ const fsCfg = {
 
     },
 
+    get: function (url) {
+        console.log('GET URL:' + this.serverAddr() + url)
+        return new Promise((resolve, reject) => {
+            Axios.get(this.serverAddr() + url)
+                .then(response => {
+                    resolve(response.data);
+                })
+                // 请求失败
+                .catch(error => {
+                    reject(error);
+                });
+
+        });
+    },
+    // console.log(error);
+    // const index = location.href.lastIndexOf("/pages");
+    // const urlBase = location.href.substring(0, index);
+    // window.location.href = urlBase + "/pages/SYSTEM/Login.html";
     postData: function (url, data, callback) {
         Axios.post(this.serverAddr() + url, data, {
             headers: {

@@ -16,7 +16,7 @@
      
     </van-cell-group>
     <van-popup v-model="showAll" position="bottom" :style="{height:'100%', width:'100%'}">
-      <allmusic v-if="showAll" @close="showAll = false" @play="play"></allmusic>
+      <allmusic v-if="showAll" @close="showAll = false" @play="play" @addmusic="addMusic"></allmusic>
     </van-popup>
 
     <!-- 搜索 -->
@@ -25,7 +25,7 @@
     </van-popup>
 
     <van-popup v-model="showFavours" position="bottom" :style="{height:'100%', width:'100%'}">
-      <favours v-if="showFavours" @close="showFavours = false" @play="play"></favours>
+      <favours v-if="showFavours" @close="showFavours = false" @play="play" @addmusic="addMusic"></favours>
     </van-popup>
 
   
@@ -65,6 +65,9 @@ export default {
     onSearch() {},
     onClick() {
       this.$router.push({ path: "favours" });
+    },
+    addMusic(item){
+      this.$emit('addmusic', item);
     },
     login() {
       const index = location.href.lastIndexOf("/pages");

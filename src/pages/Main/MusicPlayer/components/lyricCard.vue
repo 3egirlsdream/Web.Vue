@@ -74,22 +74,17 @@ z-index: -1;
 
 
 <template>
-  <div class="pages" style="">
-
+  <div class="pages">
     <div class="page_construct_right bg">
-      <van-nav-bar title="" style="position: sticky;top:0;z-index:99999;background:transparent;border:0px;" @click-left="$emit('close')">
-        <template #left>
-          <van-icon name="arrow-down" />
-        </template>
-      </van-nav-bar>
+      <van-icon name="arrow-down" size="20" style="position: sticky;top:0; left:10px; z-index:99;background:transparent;border:0px;" @click="$emit('close')"/>
 
-      <van-image src="http://cdn.endingisnihility.xyz/162116760003467.jpg" style="z-index:99999;text-align:center;width:80vw;height:80vw;margin:10vw;">
+      <van-image src="http://cdn.endingisnihility.xyz/162116760003467.jpg" style="z-index:99;text-align:center;width:80vw;height:80vw;margin:10vw;">
         <van-row>
           <van-col span="20">
             <div class="header-style">{{item.MUSIC_NAME}}</div>
           </van-col>
           <van-col span="4">
-            <van-icon name="like" size="25" :color="item.COLOR" />
+            <van-icon name="like-o" size="25" :color="item.COLOR" />
           </van-col>
         </van-row>
         <van-row>
@@ -97,16 +92,25 @@ z-index: -1;
         </van-row>
         <van-row style="height:30%;"></van-row>
         <van-row>
-          <van-col span="6"><van-icon name="underway" size="25"/></van-col>
-          <van-col span="6"><van-icon name="comment" size="25"/></van-col>
-          <van-col span="6"><van-icon name="share" size="25"/></van-col>
-          <van-col span="6"><van-icon name="weapp-nav" size="25"/></van-col>
+          <van-col span="6" @click="changeStatus">
+            <van-icon v-show="status.playStatus == 'loop'" name="replay" size="25"/>
+            <van-image v-show="status.playStatus == 'single'" src="http://cdn.endingisnihility.xyz/replay.png" width="25" height="25"></van-image>
+          </van-col>
+          <van-col span="6"><van-icon name="comment-o" size="25"/></van-col>
+          <van-col span="6"><van-icon name="share-o" size="25"/></van-col>
+          <van-col span="6">
+             <van-popover v-model="show" trigger="click" placement="top" >
+                <playlistCard :playlist="playlist"></playlistCard>
+                <template #reference>
+                    <van-icon name="orders-o" size="25"/>
+                  </template>
+              </van-popover>
+          </van-col>
         </van-row>
       </van-image>
 
+     
     </div>
-    <audio ref="audio" preload="auto" controls="controls" :src="src" style="background:#f1f3f4;bottom: 0px;position: absolute;width: 100%;z-index:99999">
-    </audio>
   </div>
 </template>
 
@@ -122,19 +126,31 @@ export default {
   },
   components: {
     musicatom: () => import("./musicatom.vue"),
+    playlistCard:()=>import('./playlistCard.vue')
   },
   props: {
-    audio: HTMLAudioElement,
     item: Object,
+    status:Object,
+    playlist:Array
   },
   data() {
     return {
-      src: "",
-      playlist: [],
+      src: "http://cdn.endingisnihility.xyz/llskvrestDSYprLbumb8LFzCQfOY",
       show: true,
     };
   },
+  watch:{
+    status(val){
+      console.log(val)
+    }
+  },
   methods: {
+    showPlaylist(){
+      console.log(1);
+    },
+    changeStatus(){
+      this.status.playStatus = this.status.playStatus == 'loop' ? 'single' : 'loop'
+    },
     ellipsis(item) {
       console.log(item);
     },
@@ -144,8 +160,6 @@ export default {
   },
 
   mounted: function () {
-    console.log(this.audio);
-    this.$refs.audio = this.audio;
   },
 };
 </script>

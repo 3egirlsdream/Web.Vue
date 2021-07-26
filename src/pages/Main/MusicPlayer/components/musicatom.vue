@@ -1,5 +1,5 @@
 <template>
-  <div style="width:100%;height:40px;padding:5px;">
+  <div style="height:40px;padding:5px;">
     <van-icon style="float:right; width:10%; line-height:30px" name="ellipsis" size="20" @click="showEllipsis = true" />
     <div style="float:left; width:10%; line-height:30px;font-size:14px;text-align:center;">{{idx}}</div>
     <div style="float:left; width:70%; line-height:30px;" @click="onClick">
@@ -8,7 +8,7 @@
       <div class="subtitle">{{item.ARTISTS}}</div>
     </div>
     <van-popup v-model="showEllipsis" position="bottom" round :style="{height:'70%', width:'100%'}"  >
-      <ellipsisCard :item="item"></ellipsisCard>
+      <ellipsisCard :item="item" @addmusic="addMusic"></ellipsisCard>
     </van-popup>
   </div>
 </template>
@@ -38,6 +38,9 @@ export default {
     ellipsis() {
       this.$emit("ellipsis");
     },
+    addMusic(){
+      this.$emit('addmusic');
+    }
   },
   mounted() {},
 };

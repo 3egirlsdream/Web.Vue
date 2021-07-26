@@ -3,7 +3,7 @@
     <van-nav-bar title="全部" style="position: sticky;top:0" left-arrow @click-left="$emit('close')"/>
     
     <van-list v-model="loading" :finished="finished" @load="getall">
-      <musicatom v-for="(item, index) in musics" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)"></musicatom>
+      <musicatom v-for="(item, index) in musics" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)" @addmusic="addMusic(item)"></musicatom>
     </van-list>
 
     
@@ -63,6 +63,9 @@ export default {
     onClick(item) {
       this.$emit('play', item);
     },
+    addMusic(item){
+      this.$emit('addmusic', item);
+    }
   },
   mounted() {
     this.getall();

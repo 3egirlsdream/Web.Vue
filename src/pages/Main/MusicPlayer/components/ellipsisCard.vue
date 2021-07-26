@@ -8,6 +8,10 @@
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="like" :color="atom.COLOR" size="20" />
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;" >{{atom.COLOR == 'red' ? '取消收藏' : '收藏'}}</div>
     </div>
+    <div style="width:100%;clear:both" @click="addmusic">
+      <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="underway-o" size="20" />
+      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">加入列表</div>
+    </div>
     <div style="width:100%;clear:both">
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="add-o" size="20" />
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">加入歌单</div>
@@ -20,10 +24,7 @@
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="down" size="20" />
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">下载</div>
     </div>
-    <div style="width:100%;clear:both">
-      <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="delete" size="20" />
-      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">删除</div>
-    </div>
+    
   </div>
 </template>
 
@@ -56,6 +57,9 @@ export default {
     },
     ellipsis() {
       this.$emit("ellipsis");
+    },
+    addmusic(){
+      this.$emit('addmusic');
     },
     ilikeClick(name) {
       let self = this;
