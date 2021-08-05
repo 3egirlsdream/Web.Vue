@@ -2,6 +2,7 @@
   <div>
     <van-nav-bar title="搜索" style="position: sticky;top:0" left-arrow @click-left="$emit('close')" />
     <van-search autofocus v-model="searchText" placeholder="搜索" @search="onSearch" />
+    <playerCard v-for="(item, ii) in artists" :key="ii + 'a'" :item="item" @onClick="play" @addmusic="addMusic()"></playerCard>
     <musicatom v-for="(item, index) in musics_after_search" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)" @ellipsis="ellipsis(item)"></musicatom>
   </div>
 </template>
@@ -12,10 +13,12 @@ export default {
   serverUrl: {
     API_GET_ALL: "/api/music/GetMusics?like={0}&start={1}&length={2}",
     API_ADD_I_LIKE: "/api/music/AddILike",
-    API_SEARCH: "/api/music/Search?value={0}&user={1}",
+    API_SEARCH: "/api/music/Search?key={0}&user={1}",
+    API_SEARCH_ARTIST:"/api/Music/SearchArtist?artist={0}"
   },
   components: {
     musicatom: () => import("./musicatom.vue"),
+    playerCard:()=>import('./playerCard.vue')
   },
   data() {
     return {
@@ -24,22 +27,28 @@ export default {
       finished: false,
       loading: false,
       musics: [],
+      artists:[],
       displayname: framework.getStorage("displayname"),
+      user:framework.getStorage("user")
     };
   },
   methods: {
-    onClick(item) {
-      this.$emit("play", item);
+    play(item){
+      this.$emit('play', item)
+    },
+    addMusic(item){
+      this.$emit("addmusic", item);
     },
     ellipsis() {
       this.$emit("ellipsis");
     },
     onSearch() {
+      this.searchArtist();
       let self = this;
       let url = framework.strFormat(
-        this.$options.serverUrl.API_SEARCH,
-        this.searchText,
-        framework.getStorage("user")
+        self.$options.serverUrl.API_SEARCH,
+        self.searchText,
+        self.user
       );
       self.$fsCfg.get(url).then((result) => {
         if (result.success) {
@@ -48,7 +57,23 @@ export default {
           self.$toast(result.message.content);
         }
       });
+      
     },
+
+    searchArtist(){
+      let self = this;
+      let url = framework.strFormat(
+        this.$options.serverUrl.API_SEARCH_ARTIST,
+        this.searchText
+      );
+      self.$fsCfg.get(url).then((result) => {
+        if (result.success) {
+          self.artists = result.data;
+        } else{
+          self.$toast(result.message.content);
+        }
+      });
+    }
   },
   mounted() {},
 };

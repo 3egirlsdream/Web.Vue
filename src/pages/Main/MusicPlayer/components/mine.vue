@@ -13,7 +13,7 @@
     <van-cell-group :border="false">
       <van-field readonly label="我喜欢" left-icon="like-o" :border="false" is-link @click="showFavours = true" />
       <van-field readonly label="音乐库" left-icon="music-o" :border="false" is-link @click="showAll = true" />
-       <van-field readonly label="排行榜" left-icon="bar-chart-o" :border="false" is-link @click="showRank = true" />
+      <van-field readonly label="排行榜" left-icon="bar-chart-o" :border="false" is-link @click="showRank = true" />
      
     </van-cell-group>
     <van-popup v-model="showAll" position="bottom" :style="{height:'100%', width:'100%'}">

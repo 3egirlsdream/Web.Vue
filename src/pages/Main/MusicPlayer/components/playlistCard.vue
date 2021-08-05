@@ -1,14 +1,16 @@
 <template>
-  <div style="height:50%;overflow-y:auto;">
-    <van-cell-group>
-      <van-cell v-for="(item, index) in playlist" :key="index" :title="item.MUSIC_NAME" />
-    </van-cell-group>
-  </div>
+  <van-cell-group>
+    <van-field v-for="(item, index) in playlist" :key="index" v-model="item.ARTISTS" center :label="item.MUSIC_NAME" readonly>
+      <template #button>
+        <van-button size="small" type="danger" @click="removeItem(index)">删除</van-button>
+      </template>
+    </van-field>
+  </van-cell-group>
+
 </template>
 
 
 <script>
-import { Toast } from "vant";
 export default {
   name: "Index",
   serverUrl: {
@@ -21,14 +23,18 @@ export default {
   },
   data() {
     return {
-      Singers: [],
       musics: [],
       audio: null,
-
       show: true,
     };
   },
-  methods: {},
+  methods: {
+    removeItem(index) {
+      this.playlist.splice(index, 1);
+      let json = JSON.stringify(this.playlist);
+      framework.setStorage("playlist", json);
+    },
+  },
 
   mounted: function () {},
 };

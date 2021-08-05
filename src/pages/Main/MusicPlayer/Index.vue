@@ -1,22 +1,14 @@
-<style lang="less" scoped>
-.pages {
-  overflow: hidden;
-  height: 100vh;
-}
-</style>
-
-
 <template>
   <div>
     <van-nav-bar title="BB音乐" style="position: sticky;top:0" @click-right="showMore = true">
-      <template #right> 
+      <template #right>
         <van-icon name="weapp-nav" />
       </template>
     </van-nav-bar>
     <mine @play="onclickPlay" @addmusic="addMusic"></mine>
 
     <div style="background:#f1f3f4;bottom: 0px;position: absolute;width: 100%;z-index:9999;height:48px;overflow:hidden">
-      <div @click="showLyric = true" style="float:left;">
+      <div @click="showLyric = !showLyric" style="float:left;">
         <img class="size" src="../../../assets/img/music.png" v-show="!show" />
         <img class="size" src="../../../assets/img/music1.png" v-show="show" />
       </div>
@@ -31,7 +23,7 @@
 
     <van-popup v-model="showMore" position="bottom" :style="{height:'86px', width:'100%'}" style="z-index:9999999">
       <van-grid>
-        <van-grid-item icon="close" text="注销" clickable @click="logout"/>
+        <van-grid-item icon="close" text="注销" clickable @click="logout" />
       </van-grid>
     </van-popup>
   </div>
@@ -46,11 +38,11 @@ export default {
     API_GET_ALL: "/api/music/GetMusics?like={0}&start={1}&length={2}",
     API_ADD_I_LIKE: "/api/music/AddILike",
     API_SEARCH: "/api/music/Search?value={0}",
-    API_COUNT_PLUS:'/api/Music/CountPlus?cdn={0}'
+    API_COUNT_PLUS: "/api/Music/CountPlus?cdn={0}",
   },
   data() {
     return {
-      showMore:false,
+      showMore: false,
       showLyric: false,
       show: false,
       musics_after_search: [],
@@ -60,6 +52,7 @@ export default {
       loading: false,
       src: "",
       item: {},
+      position:0,
       audio: null,
       playlist: [],
       status: { playStatus: "single" }, //single 单曲循环 loop 列表循环
@@ -69,10 +62,10 @@ export default {
     mine: () => import("./components/mine.vue"),
     lyric: () => import("./components/lyricCard.vue"),
   },
-  watch:{
-    item(val){
-      framework.setStorage('src', JSON.stringify(val));
-    }
+  watch: {
+    item(val) {
+      framework.setStorage("src", JSON.stringify(val));
+    },
   },
   methods: {
     onclickPlay(item) {
@@ -93,7 +86,7 @@ export default {
       } else if (this.status.playStatus == "loop") {
         if (this.playlist.length > 0) {
           this.item = this.playlist[this.position % (this.playlist.length - 1)];
-          this.audio.src = this.item.CDN;
+          this.audio.src = "http://cdn.endingisnihility.xyz/" + this.item.CDN;
           setTimeout(() => {
             self.play();
           }, 1000);
@@ -103,9 +96,11 @@ export default {
       }
     },
 
-    play(){
-      this.audio.play();
-      this.countPlus(this.item.CDN);
+    play() {
+      setTimeout(() => {
+        this.audio.play();
+        this.countPlus(this.item.CDN);
+      }, 1000);
     },
     onclick() {
       this.$router.push({ path: "favours" });
@@ -115,46 +110,56 @@ export default {
         this.searchShow = true;
       }
     },
-    addMusic(item){
-      var idx = this.playlist.findIndex(v=>v.MUSIC_NAME == item.MUSIC_NAME);
-      if(idx < 0){
+    addMusic(item) {
+      var idx = this.playlist.findIndex((v) => v.MUSIC_NAME == item.MUSIC_NAME);
+      if (idx < 0) {
         this.playlist.push(item);
-        this.$toast('添加成功');
+        this.$toast("添加成功");
         let json = JSON.stringify(this.playlist);
-        framework.setStorage('playlist', json);
-      }
-      else{
-        this.$toast('已存在列表');
+        framework.setStorage("playlist", json);
+      } else {
+        this.$toast("已存在列表");
       }
     },
-    logout(){
+    logout() {
       const index = location.href.lastIndexOf("/pages");
       const urlBase = location.href.substring(0, index);
       window.location.href = urlBase + "/pages/SYSTEM/Login.html";
     },
-    countPlus(cdn){
-      let url = framework.strFormat(this.$options.serverUrl.API_COUNT_PLUS, cdn);
-      this.$fsCfg.get(url).then((res)=>{
-        if(!res.success){
-          this.$toast(res.message.content);
-        }
-      }).catch((err)=>{
-        this.$toast(err);
-      })
-    }
+    countPlus(cdn) {
+      let url = framework.strFormat(
+        this.$options.serverUrl.API_COUNT_PLUS,
+        cdn
+      );
+      this.$fsCfg
+        .get(url)
+        .then((res) => {
+          if (!res.success) {
+            this.$toast(res.message.content);
+          }
+        })
+        .catch((err) => {
+          this.$toast(err);
+        });
+    },
   },
   mounted: function () {
     this.audio = this.$refs.audio;
     this.audio.addEventListener("ended", this.playEndedHandler, false);
-    let pl = framework.getStorage('playlist');
-    if(pl != '' && pl != undefined && pl != null){
+    let pl = framework.getStorage("playlist");
+    if (pl != "" && pl != undefined && pl != null) {
       this.playlist = JSON.parse(pl);
     }
 
-    let item = framework.getStorage('src');
-    if(item != null && item != undefined && item != ""){
+    let item = framework.getStorage("src");
+    if (item != null && item != undefined && item != "" && item != 'undefined') {
       this.item = JSON.parse(item);
       this.src = "http://cdn.endingisnihility.xyz/" + this.item.CDN;
+    }
+    else{
+      if(this.playlist.length > 0){
+        this.item = this.playlist[0];
+      }
     }
 
     setInterval(() => {

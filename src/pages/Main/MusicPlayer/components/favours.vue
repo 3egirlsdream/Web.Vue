@@ -18,7 +18,7 @@
     <div class="page_construct_right" style="border-radius:25px;">
 
       <van-cell icon="audio" value="播放全部" clickable @click="playAll()" style="background:transparent;" :border="false" />
-      <musicatom v-for="(item, index) in musics" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)" @ellipsis="ellipsis(item)" @addmusic="addMusic(item)"></musicatom>
+      <musicatom v-for="(item, index) in musics" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)" @addmusic="addMusic(item)"></musicatom>
     </div>
   </div>
 </template>
@@ -55,6 +55,13 @@ export default {
       this.$emit('addmusic', item);
     },
     playAll() {
+      if(this.musics.length > 0){
+        this.onClick(this.musics[0]);
+      }
+      for (let index = 0; index < this.musics.length; index++) {
+        const item = this.musics[index];
+        this.$emit('addmusic', item);
+      }
     },
     getILike() {
       let self = this;

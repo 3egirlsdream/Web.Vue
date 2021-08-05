@@ -8,7 +8,7 @@
       <div class="subtitle">{{item.ARTISTS}}</div>
     </div>
 
-    <div v-if="item.QTY != undefined && item.QTY != null && item.QTY > 0"  style="float:left; width:10%; line-height:30px;">
+    <div v-show="show != 1" v-if="item.QTY != undefined && item.QTY != null && item.QTY > 0"  style="float:left; width:10%; line-height:30px;">
       <div style="width:100%; line-height:18px;font-size:14px;overflow:hidden;height:18px"></div>
       <div class="subtitle">{{item.QTY}}次</div>
     </div>
@@ -24,6 +24,7 @@ export default {
   name: "index",
   serverUrl: {},
   props: {
+    show:Number,
     idx: Number,
     item: Object,
   },
@@ -40,9 +41,6 @@ export default {
   methods: {
     onClick() {
       this.$emit("onClick");
-    },
-    ellipsis() {
-      this.$emit("ellipsis");
     },
     addMusic(){
       this.$emit('addmusic');
