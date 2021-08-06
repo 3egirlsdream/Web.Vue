@@ -144,7 +144,7 @@ z-index: -1;
     </div>
 
     <van-popup round v-model="show" position="bottom" :style="{height:'50%', width:'100%'}">
-      <playlistCard v-if="show" :playlist="playlist"></playlistCard>
+      <playlistCard v-if="show" :playlist="playlist" :musicname="item.MUSIC_NAME"></playlistCard>
     </van-popup>
 
   </div>

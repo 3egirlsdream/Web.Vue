@@ -2,8 +2,9 @@
   <div>
     <van-nav-bar title="搜索" style="position: sticky;top:0" left-arrow @click-left="$emit('close')" />
     <van-search autofocus v-model="searchText" placeholder="搜索" @search="onSearch" />
-    <playerCard v-for="(item, ii) in artists" :key="ii + 'a'" :item="item" @onClick="play" @addmusic="addMusic()"></playerCard>
-    <musicatom v-for="(item, index) in musics_after_search" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)" @ellipsis="ellipsis(item)"></musicatom>
+    <van-loading v-show="!cardLoaded || !listLoaded" type="spinner" style="line-height:70vh;text-align:center;"/>
+    <playerCard v-show="cardLoaded && listLoaded" v-for="(item, ii) in artists" :key="ii + 'a'" :item="item" @onClick="play" @addmusic="addMusic()"></playerCard>
+    <musicatom v-show="cardLoaded && listLoaded" v-for="(item, index) in musics_after_search" :key="index" :item="item" :idx="index + 1" @onClick="onClick(item)" @ellipsis="ellipsis(item)"></musicatom>
   </div>
 </template>
 
@@ -29,11 +30,16 @@ export default {
       musics: [],
       artists:[],
       displayname: framework.getStorage("displayname"),
-      user:framework.getStorage("user")
+      user:framework.getStorage("user"),
+      cardLoaded:true,
+      listLoaded:true
     };
   },
   methods: {
     play(item){
+      this.$emit('play', item)
+    },
+    onClick(item){
       this.$emit('play', item)
     },
     addMusic(item){
@@ -45,6 +51,7 @@ export default {
     onSearch() {
       this.searchArtist();
       let self = this;
+      self.listLoaded = false;
       let url = framework.strFormat(
         self.$options.serverUrl.API_SEARCH,
         self.searchText,
@@ -53,8 +60,10 @@ export default {
       self.$fsCfg.get(url).then((result) => {
         if (result.success) {
           self.musics_after_search = result.data;
+          self.listLoaded = true;
         } else{
           self.$toast(result.message.content);
+          self.listLoaded = true;
         }
       });
       
@@ -62,6 +71,7 @@ export default {
 
     searchArtist(){
       let self = this;
+      self.cardLoaded = false;
       let url = framework.strFormat(
         this.$options.serverUrl.API_SEARCH_ARTIST,
         this.searchText
@@ -69,8 +79,10 @@ export default {
       self.$fsCfg.get(url).then((result) => {
         if (result.success) {
           self.artists = result.data;
+          self.cardLoaded = true;
         } else{
           self.$toast(result.message.content);
+          self.cardLoaded = true;
         }
       });
     }

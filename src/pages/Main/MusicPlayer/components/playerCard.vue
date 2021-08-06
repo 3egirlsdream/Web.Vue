@@ -12,8 +12,8 @@
       <van-col span="2">{{item.ALBUM_COUNT}}</van-col>
     </van-row>
   </div>
-  <van-popup v-model="show" position="bottom" :style="{height:'100%', width:'100%'}">
-    <singerCard @close="close()" :name="item.ARTISTS" @onClick="onClick" @addmusic="addMusic"></singerCard>
+  <van-popup v-model="show" position="right" :style="{height:'100%', width:'100%'}">
+    <singerCard v-if="show" @close="close()" :name="item.ARTISTS" @onClick="onClick" @addmusic="addMusic"></singerCard>
   </van-popup>
 </v-app>
 </template>
@@ -59,9 +59,8 @@ export default {
   box-shadow: 0px 0px 5px #bebebe;
   border-radius: 7px;
   background: #fff;
-  width: 90%;
-  margin: 20px 5%;
-  overflow: hidden;
+  width: 89%;
+  margin: 20px 4%;
 }
 
 .weight700{

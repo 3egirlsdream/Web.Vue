@@ -1,6 +1,6 @@
 <template>
   <van-cell-group>
-    <van-field v-for="(item, index) in playlist" :key="index" v-model="item.ARTISTS" center :label="item.MUSIC_NAME" readonly>
+    <van-field :left-icon="musicname == item.MUSIC_NAME ? 'music-o' : ''" v-for="(item, index) in playlist" :key="index" v-model="item.ARTISTS" center :label="item.MUSIC_NAME" readonly>
       <template #button>
         <van-button size="small" type="danger" @click="removeItem(index)">删除</van-button>
       </template>
@@ -20,6 +20,7 @@ export default {
   },
   props: {
     playlist: Array,
+    musicname:String
   },
   data() {
     return {
@@ -36,6 +37,7 @@ export default {
     },
   },
 
-  mounted: function () {},
+  mounted: function () {
+  },
 };
 </script>

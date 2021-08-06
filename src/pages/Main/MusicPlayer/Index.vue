@@ -105,21 +105,15 @@ export default {
     onclick() {
       this.$router.push({ path: "favours" });
     },
-    tabClick(name, title) {
-      if (title == "搜索") {
-        this.searchShow = true;
-      }
-    },
     addMusic(item) {
       var idx = this.playlist.findIndex((v) => v.MUSIC_NAME == item.MUSIC_NAME);
-      if (idx < 0) {
-        this.playlist.push(item);
-        this.$toast("添加成功");
-        let json = JSON.stringify(this.playlist);
-        framework.setStorage("playlist", json);
-      } else {
-        this.$toast("已存在列表");
+      if(idx >= 0){
+        this.playlist.splice(idx, 1);
       }
+      this.playlist.unshift(item);
+      this.$toast("添加成功");
+      let json = JSON.stringify(this.playlist);
+      framework.setStorage("playlist", json);
     },
     logout() {
       const index = location.href.lastIndexOf("/pages");

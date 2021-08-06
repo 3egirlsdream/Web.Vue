@@ -6,7 +6,7 @@
     <van-divider />
     <div style="width:100%" @click="ilikeClick(atom.MUSIC_NAME)">
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="like" :color="atom.COLOR" size="20" />
-      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;" >{{atom.COLOR == 'red' ? '取消收藏' : '收藏'}}</div>
+      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">{{atom.COLOR == 'red' ? '取消收藏' : '收藏'}}</div>
     </div>
     <div style="width:100%;clear:both" @click="addmusic">
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="underway-o" size="20" />
@@ -16,15 +16,15 @@
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="add-o" size="20" />
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">加入歌单</div>
     </div>
-    <div style="width:100%;clear:both">
+    <div style="width:100%;clear:both" @click="showShare = true">
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="share-o" size="20" />
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">分享</div>
     </div>
     <div style="width:100%;clear:both">
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="down" size="20" />
-      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">下载</div>
+      <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;"><a :title="item.MUSIC_NAME" :download="item.MUSIC_NAME" :href="'http://cdn.endingisnihility.xyz/'+item.CDN">下载</a></div>
     </div>
-    
+    <van-share-sheet v-model="showShare" title="分享" :options="options" />
   </div>
 </template>
 
@@ -40,16 +40,22 @@ export default {
   },
   data() {
     return {
+      showShare: false,
+      options: [
+        { name: "微信", icon: "wechat" },
+        { name: "微博", icon: "weibo" },
+        { name: "复制链接", icon: "link" },
+      ],
       musics: [],
-      atom:{},
+      atom: {},
       musicimg: "",
       displayname: framework.getStorage("displayname"),
     };
   },
-  watch:{
-    atom(val){
+  watch: {
+    atom(val) {
       console.log(val);
-    }
+    },
   },
   methods: {
     onClick() {
@@ -58,14 +64,14 @@ export default {
     ellipsis() {
       this.$emit("ellipsis");
     },
-    addmusic(){
-      this.$emit('addmusic');
+    addmusic() {
+      this.$emit("addmusic");
     },
     ilikeClick(name) {
       let self = this;
       let user = framework.getStorage("user");
       var data = {
-        USER_CODE:  user,
+        USER_CODE: user,
         MUSIC_NAME: name,
       };
       self.$fsCfg.postData(
@@ -74,8 +80,7 @@ export default {
         function (res) {
           if (res.success) {
             self.atom.COLOR = self.atom.COLOR == "red" ? "black" : "red";
-          }
-          else{
+          } else {
             self.$toast(res.message.content);
           }
         }
@@ -85,7 +90,7 @@ export default {
   mounted() {
     this.musicimg = framework.getStorage("myimg");
     this.atom = this.item;
-    this.atom.ARTISTS = this.atom.ARTISTS
+    this.atom.ARTISTS = this.atom.ARTISTS;
     console.log(this.atom);
   },
 };

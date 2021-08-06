@@ -85,7 +85,10 @@ export default {
   },
 
   mounted: function () {
-    this.init();
+    window.setTimeout(()=>{
+      this.init();
+    }, 100);
+    
   },
 };
 </script>
