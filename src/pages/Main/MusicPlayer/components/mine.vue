@@ -16,6 +16,9 @@
       <van-field readonly label="排行榜" left-icon="bar-chart-o" :border="false" is-link @click="showRank = true" />
      
     </van-cell-group>
+
+    <songListCard></songListCard>
+
     <van-popup v-model="showAll" position="bottom" :style="{height:'100%', width:'100%'}">
       <allmusic v-if="showAll" @close="showAll = false" @play="play" @addmusic="addMusic"></allmusic>
     </van-popup>
@@ -39,6 +42,7 @@
 </template>
 
 <script>
+
 export default {
   name: "index",
   serverUrl: {},
@@ -47,6 +51,7 @@ export default {
     search: () => import("./search.vue"),
     favours: () => import("./favours.vue"),
     rank: () => import("./rankCard.vue"),
+    songListCard:()=>import('./songListCard.vue')
   },
   data() {
     return {

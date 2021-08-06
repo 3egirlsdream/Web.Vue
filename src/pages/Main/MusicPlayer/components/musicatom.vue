@@ -4,11 +4,11 @@
     <div style="float:left; width:10%; line-height:30px;font-size:14px;text-align:center;">{{idx}}</div>
     <div style="float:left; width:60%; line-height:30px;" @click="onClick">
       <div style="width:100%; line-height:18px;font-size:14px;overflow:hidden;height:18px">{{item.MUSIC_NAME}}</div>
-      <van-tag plain color="#FAA300" size="xsmall" style="float:left;">SQ</van-tag>
+      <van-tag plain color="#FAA300" style="float:left;font-size:9px; line-height:12px">SQ</van-tag>
       <div class="subtitle">{{item.ARTISTS}}</div>
     </div>
 
-    <div v-show="show != 1" v-if="item.QTY != undefined && item.QTY != null && item.QTY > 0"  style="float:left; width:10%; line-height:30px;">
+    <div v-show="show != 1" v-if="!!item.QTY && item.QTY > 0"  style="float:left; width:10%; line-height:30px;">
       <div style="width:100%; line-height:18px;font-size:14px;overflow:hidden;height:18px"></div>
       <div class="subtitle">{{item.QTY}}次</div>
     </div>
@@ -53,10 +53,10 @@ export default {
 <style scoped>
 .subtitle {
   width: calc(100%-12px);
-  line-height: 14px;
+  line-height: 12px;
   font-size: 12px;
   color: lightgrey;
   padding-left: 30px;
-  padding-top: 2px;
+  padding-top: 1px;
 }
 </style>
