@@ -14,7 +14,7 @@
     </div>
 
     <van-popup v-model="showEllipsis" position="bottom" round :style="{height:'70%', width:'100%'}"  >
-      <ellipsisCard :item="item" @addmusic="addMusic"></ellipsisCard>
+      <ellipsisCard v-if="showEllipsis" :item="item" @addmusic="addMusic"></ellipsisCard>
     </van-popup>
   </div>
 </template>

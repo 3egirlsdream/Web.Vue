@@ -12,7 +12,7 @@
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="underway-o" size="20" />
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">加入列表</div>
     </div>
-    <div style="width:100%;clear:both">
+    <div style="width:100%;clear:both" @click="showSongList=true">
       <van-icon style="float:left; width:20px; line-height:30px;margin-left:20%;" name="add-o" size="20" />
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;">加入歌单</div>
     </div>
@@ -25,10 +25,16 @@
       <div style="float:left; width:20%; line-height:30px;font-size:14px;text-align:center;"><a :title="item.MUSIC_NAME" :download="item.MUSIC_NAME" :href="'http://cdn.endingisnihility.xyz/'+item.CDN">下载</a></div>
     </div>
     <van-share-sheet v-model="showShare" title="分享" :options="options" />
+    <van-popup v-model="showSongList" position="bottom" :style="{height:'50%', width:'100%'}">
+      <van-cell-group>
+        <van-cell v-for="(im, index) in songLists" :key="index" :title="im.LIST_NAME" clickable @click="addSongToList(im.LIST_ID, atom.ID)"/>
+      </van-cell-group>
+    </van-popup>
   </div>
 </template>
 
 <script>
+import song_list_helper from '../../../../assets/js/song_list_helper'
 export default {
   name: "index",
   serverUrl: {},
@@ -40,6 +46,8 @@ export default {
   },
   data() {
     return {
+      songLists:[],
+      showSongList:false,
       showShare: false,
       options: [
         { name: "微信", icon: "wechat" },
@@ -86,11 +94,29 @@ export default {
         }
       );
     },
+    getSongList(){
+      let user = framework.getStorage('user');
+      song_list_helper.getSongList(user, "", "").then((data)=>{
+        this.songLists = data;
+      }).catch((err)=>{
+        this.$toast(err);
+      });
+    },
+    addSongToList(listId, songId){
+      let user = framework.getStorage('user');
+      song_list_helper.addSongToList(user, listId, songId).then(()=>{
+        this.$toast('添加成功');
+        this.showSongList = false;
+      }).catch((err)=>{
+        this.$toast(err);
+      });
+    }
   },
   mounted() {
     this.musicimg = framework.getStorage("myimg");
     this.atom = this.item;
     this.atom.ARTISTS = this.atom.ARTISTS;
+    this.getSongList();
     console.log(this.atom);
   },
 };
