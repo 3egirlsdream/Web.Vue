@@ -172,12 +172,16 @@ export default {
   },
   data() {
     return {
-      info: "",
+      info: {LYRIC:''},
       src: "http://cdn.endingisnihility.xyz/llskvrestDSYprLbumb8LFzCQfOY",
       show: false,
     };
   },
-  watch: {},
+  watch: {
+    item(){
+      this.getLyric();
+    }
+  },
   methods: {
     getLyric() {
       let url = framework.strFormat(
@@ -189,8 +193,8 @@ export default {
         .get(url)
         .then((res) => {
           if (res.success ) {
-            if(res.data != null){
-              this.info = res.data;
+            if(res.data != null && !!res.data.LYRIC){
+              this.info.LYRIC = res.data.LYRIC
             }
           } else {
             this.$toast(res.message.content);

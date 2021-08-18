@@ -80,7 +80,7 @@ export default {
       if(this.musics.length > 0){
         this.onClick(this.musics[0]);
       }
-      for (let index = 0; index < this.musics.length; index++) {
+      for (let index = this.musics.length - 1; index >= 0; index--) {
         const item = this.musics[index];
         this.$emit("addmusic", item);
       }
@@ -89,7 +89,7 @@ export default {
       let user = framework.getStorage('user');
       song_list_helper.getSongList(user, this.ID, "").then((data)=>{
         this.item = data[0];
-        console.log(this.item)
+        this.musics = data[0].DETAILS;
       }).catch((err)=>{
         this.$toast(err);
       });

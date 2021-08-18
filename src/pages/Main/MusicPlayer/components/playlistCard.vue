@@ -5,8 +5,8 @@
         <van-button size="small" type="danger" @click="removeItem(index)">删除</van-button>
       </template>
     </van-field>
+    <van-field center label="" readonly/>
   </van-cell-group>
-
 </template>
 
 

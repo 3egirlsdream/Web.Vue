@@ -25,7 +25,7 @@
     </van-cell-group>
   </van-dialog>
   <van-popup v-model="showDtl" position="bottom" :style="{height:'100%', width:'100%'}">
-    <songListDtl v-if="showDtl" @close="showDtl = false" :ID="songListId" @onClick="onClick" @del="showDtl=false,getSongList()"></songListDtl>
+    <songListDtl v-if="showDtl" @close="showDtl = false" :ID="songListId" @onClick="play" @del="showDtl=false,getSongList()" @addmusic="addMusic"></songListDtl>
   </van-popup>
 </div>
 </template>

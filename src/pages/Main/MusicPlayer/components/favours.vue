@@ -58,7 +58,7 @@ export default {
       if(this.musics.length > 0){
         this.onClick(this.musics[0]);
       }
-      for (let index = 0; index < this.musics.length; index++) {
+      for (let index = this.musics.length - 1; index >= 0; index--) {
         const item = this.musics[index];
         this.$emit('addmusic', item);
       }

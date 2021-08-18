@@ -17,7 +17,7 @@
      
     </van-cell-group>
 
-    <songListCard></songListCard>
+    <songListCard @play="play"></songListCard>
 
     <van-popup v-model="showAll" position="bottom" :style="{height:'100%', width:'100%'}">
       <allmusic v-if="showAll" @close="showAll = false" @play="play" @addmusic="addMusic"></allmusic>

@@ -85,7 +85,7 @@ export default {
         self.play();
       } else if (this.status.playStatus == "loop") {
         if (this.playlist.length > 0) {
-          this.item = this.playlist[this.position % (this.playlist.length - 1)];
+          this.item = this.playlist[(this.playlist.length - 1) % this.position];
           this.audio.src = "http://cdn.endingisnihility.xyz/" + this.item.CDN;
           setTimeout(() => {
             self.play();
