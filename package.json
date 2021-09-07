@@ -27,7 +27,6 @@
     "babel-plugin-import": "^1.13.0",
     "css-loader": "^1.0.1",
     "deepmerge": "^4.2.2",
-    "fibers": "^4.0.3",
     "less": "^3.11.3",
     "less-loader": "^4.1.0",
     "postcss-pxtorem": "^4.0.1",
